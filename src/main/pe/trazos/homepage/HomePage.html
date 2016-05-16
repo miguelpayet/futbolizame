@@ -1,0 +1,51 @@
+<wicket:extend xmlns:wicket="">
+    <wicket:child/>
+    <wicket:fragment wicket:id="partido">
+        <div class="row fecha">
+            <div class="col-md-3" wicket:id="fecha"></div>
+        </div>
+        <div class="row" wicket:id="filaPartido">
+            <!--div wicket:id="filaPartido"-->
+                <div class="col-md-4 equipo local" wicket:id="equipoLocal"></div>
+                <div class="col-md-1 equipo centro">vs.</div>
+                <div class="col-md-4 equipo visita" wicket:id="equipoVisitante"></div>
+            <!--/div-->
+        </div>
+    </wicket:fragment>
+    <wicket:fragment wicket:id="equipoLocal">
+        <img wicket:id="imagen"/>
+        <span wicket:id="equipo"></span>
+    </wicket:fragment>
+    <wicket:fragment wicket:id="equipoVisitante">
+        <span wicket:id="equipo"></span>
+        <img wicket:id="imagen"/>
+    </wicket:fragment>
+    <wicket:fragment wicket:id="stats">
+        <div class="col-md-2 stats">
+            <span wicket:id="stats"></span>
+            <br/>
+            (<span wicket:id="cantStats"></span> partidos)
+        </div>
+    </wicket:fragment>
+    <wicket:fragment wicket:id="goles">
+        <div class="row">
+            <div class="col-md-2 stats local">
+                <span wicket:id="statsLocal"></span>
+                <br/>
+                (<span wicket:id="cantStatsLocal"></span> partidos)
+            </div>
+            <div class="col-md-2 goles local">
+                <input size="3" type="text" wicket:id="golesLocal"/>
+            </div>
+            <div class="col-md-1 centro"><img wicket:id="pelota"/></div>
+            <div class="col-md-2 goles visita">
+                <input size="3" type="text" wicket:id="golesVisita"/>
+            </div>
+            <div class="col-md-2 stats visitante">
+                <span wicket:id="statsVisitante"></span>
+                <br/>
+                (<span wicket:id="cantStatsVisitante"></span> partidos)
+            </div>
+        </div>
+    </wicket:fragment>
+</wicket:extend>

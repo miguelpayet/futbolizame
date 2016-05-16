@@ -1,0 +1,56 @@
+<wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <span>tabla de posiciones</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" wicket:id="containerTabla">
+                    <table class="tabla">
+                        <thead>
+                        <td>&nbsp;</td>
+                        <td>país</td>
+                        <td>puntos</td>
+                        <td>p.j.</td>
+                        <td>p.g.</td>
+                        <td>p.e.</td>
+                        <td>p.p.</td>
+                        <td>g.f.</td>
+                        <td>g.c.</td>
+                        <td>d.g.</td>
+                        </thead>
+                        <tr wicket:id="rows">
+                            <td wicket:id="cells">
+                                <span wicket:id="cell"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <span wicket:id="nombreFecha"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 partidos">
+                    <form wicket:id="formPartidos">
+                        <div class="repetidor" wicket:id="repeater">
+                            <div wicket:id="listItem"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-9 boton">
+                                <input type="button" wicket:id="save" value="actualizar tabla"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</wicket:extend>
