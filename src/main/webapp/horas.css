@@ -1,0 +1,11 @@
+.login-form {
+display:table;
+}
+
+.login-form-cell {
+display:table-cell;
+}
+
+.login-form-row {
+display:table-row;
+}
