@@ -60,12 +60,12 @@ public class HomePageAnonimo extends HomePage {
 	}
 
 	protected void calcularPosiciones() {
-		concurso.crearPosiciones();
+		competencia.crearPosiciones();
 	}
 
 	protected void formSubmit() {
 		log.info("anonimo.formsubmit");
-		concurso.crearPosiciones();
+		competencia.crearPosiciones();
 	}
 
 }

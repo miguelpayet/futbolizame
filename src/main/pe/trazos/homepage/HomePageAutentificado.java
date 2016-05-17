@@ -95,7 +95,7 @@ public class HomePageAutentificado extends HomePage {
 				throw new RuntimeException("no obtuvo pronósticos");
 			}
 			// calcular posiciones de la tabla con estos pronosticos
-			concurso.crearPosiciones(pronosticos);
+			competencia.crearPosiciones(pronosticos);
 		} else {
 			// no debería estar en esta página
 			doLogout();
@@ -108,7 +108,7 @@ public class HomePageAutentificado extends HomePage {
 		DaoPronostico dp = new DaoPronostico();
 		pronosticos.values().forEach(dp::grabar);
 		// actualizar la tabla
-		concurso.crearPosiciones(pronosticos);
+		competencia.crearPosiciones(pronosticos);
 	}
 
 	private Pronostico getPronostico(Participacion unaParticipacion) {

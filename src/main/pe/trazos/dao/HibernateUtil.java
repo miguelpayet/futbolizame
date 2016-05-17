@@ -24,7 +24,7 @@ public class HibernateUtil {
 	}
 
 	private static void registrarClases() {
-		configuration.addAnnotatedClass(Concurso.class);
+		configuration.addAnnotatedClass(Competencia.class);
 		configuration.addAnnotatedClass(Equipo.class);
 		configuration.addAnnotatedClass(Fecha.class);
 		configuration.addAnnotatedClass(Participacion.class);

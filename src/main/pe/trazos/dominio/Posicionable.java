@@ -37,19 +37,19 @@ public abstract class Posicionable implements IObjetoDominio<Integer> {
 				partidoEmpatado = 1;
 				partidoGanado = 0;
 				partidoPerdido = 0;
-				puntos = Concurso.PUNTOS_EMPATE;
+				puntos = Competencia.PUNTOS_EMPATE;
 			} else if (this.getGoles() > unPosicionable.getGoles()) {
 				// ganador
 				partidoEmpatado = 0;
 				partidoGanado = 1;
 				partidoPerdido = 0;
-				puntos = Concurso.PUNTOS_VICTORIA;
+				puntos = Competencia.PUNTOS_VICTORIA;
 			} else if (this.getGoles() < unPosicionable.getGoles()) {
 				// perdedor
 				partidoEmpatado = 0;
 				partidoGanado = 0;
 				partidoPerdido = 1;
-				puntos = Concurso.PUNTOS_DERROTA;
+				puntos = Competencia.PUNTOS_DERROTA;
 			}
 		}
 		return tieneGoles;

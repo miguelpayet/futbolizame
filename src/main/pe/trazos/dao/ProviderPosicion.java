@@ -5,7 +5,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pe.trazos.dominio.Concurso;
+import pe.trazos.dominio.Competencia;
 import pe.trazos.dominio.Posicion;
 
 import java.io.Serializable;
@@ -14,12 +14,12 @@ import java.util.TreeSet;
 
 public class ProviderPosicion implements IDataProvider<Posicion>, Serializable {
 
-	private Concurso concurso;
+	private Competencia competencia;
 	private final Logger logger = LoggerFactory.getLogger(ProviderPosicion.class);
 	private Integer numero;
 
-	public ProviderPosicion(Concurso unConcurso) {
-		concurso = unConcurso;
+	public ProviderPosicion(Competencia unCompetencia) {
+		competencia = unCompetencia;
 		numero = 1;
 	}
 
@@ -31,7 +31,7 @@ public class ProviderPosicion implements IDataProvider<Posicion>, Serializable {
 
 	@Override
 	public Iterator<? extends Posicion> iterator(long first, long count) {
-		TreeSet<Posicion> posiciones = new TreeSet<>(concurso.getPosiciones().values());
+		TreeSet<Posicion> posiciones = new TreeSet<>(competencia.getPosiciones().values());
 		return posiciones.iterator();
 	}
 
@@ -42,14 +42,14 @@ public class ProviderPosicion implements IDataProvider<Posicion>, Serializable {
 
 	@Override
 	public long size() {
-		if (concurso == null) {
-			logger.info("sin concurso");
+		if (competencia == null) {
+			logger.info("sin competencia");
 			return 0;
 		}
-		if (concurso.getPosiciones() == null) {
-			concurso.crearPosiciones();
+		if (competencia.getPosiciones() == null) {
+			competencia.crearPosiciones();
 		}
-		return concurso.getPosiciones().size();
+		return competencia.getPosiciones().size();
 	}
 
 }

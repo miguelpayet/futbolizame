@@ -11,7 +11,7 @@ public class Fecha implements IObjetoDominio<Integer>, Comparable<Fecha> {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idconcurso")
-	private Concurso concurso;
+	private Competencia competencia;
 	@Column(name = "fecha")
 	private Date fecha;
 	@Id
@@ -33,8 +33,8 @@ public class Fecha implements IObjetoDominio<Integer>, Comparable<Fecha> {
 		return fecha.compareTo(o.getFecha());
 	}
 
-	public Concurso getConcurso() {
-		return concurso;
+	public Competencia getCompetencia() {
+		return competencia;
 	}
 
 	public Date getFecha() {
@@ -57,8 +57,8 @@ public class Fecha implements IObjetoDominio<Integer>, Comparable<Fecha> {
 		return partidos;
 	}
 
-	public void setConcurso(Concurso concurso) {
-		this.concurso = concurso;
+	public void setCompetencia(Competencia competencia) {
+		this.competencia = competencia;
 	}
 
 	public void setFecha(Date fecha) {

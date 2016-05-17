@@ -11,18 +11,18 @@ import java.util.Map;
 import java.util.SortedSet;
 
 @Entity
-@Table(name = "concurso")
+@Table(name = "competencia")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Concurso implements IObjetoDominio<Integer> {
+public class Competencia implements IObjetoDominio<Integer> {
 
 	static final int PUNTOS_DERROTA = 0;
 	static final int PUNTOS_EMPATE = 1;
 	static final int PUNTOS_VICTORIA = 3;
-	private static final Logger log = LoggerFactory.getLogger(Concurso.class);
+	private static final Logger log = LoggerFactory.getLogger(Competencia.class);
 
 	@Column(name = "actualizado")
 	private Date actualizado;
-	@OneToMany(mappedBy = "concurso", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "competencia", cascade = CascadeType.ALL)
 	@SortComparator(ComparadorFecha.class)
 	private SortedSet<Fecha> fechas;
 	@Id
@@ -36,7 +36,7 @@ public class Concurso implements IObjetoDominio<Integer> {
 	@Transient
 	Map<Equipo, Posicion> posiciones;
 
-	public Concurso() {
+	public Competencia() {
 		posiciones = new HashMap<>();
 	}
 
@@ -187,7 +187,7 @@ public class Concurso implements IObjetoDominio<Integer> {
 						posi.setEquipo(partic.getEquipo());
 						posiciones.put(partic.getEquipo(), posi);
 					}
-					posi.setConcurso(this);
+					posi.setCompetencia(this);
 					Pronostico pro = null;
 					if (pronosticos != null) {
 						pro = pronosticos.get(partic);

@@ -13,7 +13,7 @@ public class Posicion implements Serializable, Comparable<Posicion> {
 
 	@ManyToOne()
 	@JoinColumn(name = "idconcurso")
-	private Concurso concurso;
+	private Competencia competencia;
 	@ManyToOne()
 	@JoinColumn(name = "idequipo")
 	private Equipo equipo;
@@ -70,8 +70,8 @@ public class Posicion implements Serializable, Comparable<Posicion> {
 		}
 	}
 
-	public Concurso getConcurso() {
-		return concurso;
+	public Competencia getCompetencia() {
+		return competencia;
 	}
 
 	public Integer getDiferenciaGoles() {
@@ -131,8 +131,8 @@ public class Posicion implements Serializable, Comparable<Posicion> {
 		puntos = 0;
 	}
 
-	public void setConcurso(Concurso concurso) {
-		this.concurso = concurso;
+	public void setCompetencia(Competencia competencia) {
+		this.competencia = competencia;
 	}
 
 	public void setEquipo(Equipo equipo) {

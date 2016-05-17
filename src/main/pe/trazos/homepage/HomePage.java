@@ -19,7 +19,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pe.trazos.componentes.WebPageBase;
-import pe.trazos.dao.DaoConcurso;
+import pe.trazos.dao.DaoCompetencia;
 import pe.trazos.dao.ProviderPosicion;
 import pe.trazos.dominio.*;
 import pe.trazos.web.FutbolizameApplication;
@@ -31,7 +31,7 @@ import java.util.List;
 
 public abstract class HomePage extends WebPageBase {
 
-	protected Concurso concurso;
+	protected Competencia competencia;
 	protected WebMarkupContainer containerTabla;
 	protected SimpleDateFormat dateFormat;
 	protected Fecha fecha;
@@ -99,7 +99,7 @@ public abstract class HomePage extends WebPageBase {
 	}
 
 	protected void agregarIntro() throws RuntimeException {
-		String intro = concurso.getNombre();
+		String intro = competencia.getNombre();
 		if (getSesion().isSignedIn()) {
 			intro += " - " + getSesion().getUserName();
 		}
@@ -124,7 +124,7 @@ public abstract class HomePage extends WebPageBase {
 
 	protected void agregarTabla() {
 		List<ICellPopulator<Posicion>> columns = crearColumnas();
-		ProviderPosicion provider = new ProviderPosicion(concurso);
+		ProviderPosicion provider = new ProviderPosicion(competencia);
 		DataGridView<Posicion> dgv = new DataGridView<>("rows", columns, provider);
 		dgv.setOutputMarkupId(true);
 		containerTabla = new WebMarkupContainer("containerTabla");
@@ -165,16 +165,16 @@ public abstract class HomePage extends WebPageBase {
 
 	protected void initPagina() throws RuntimeException {
 		dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		Integer idConcurso = Integer.valueOf(FutbolizameApplication.get().getInitParameter("concurso.id"));
+		Integer idConcurso = Integer.valueOf(FutbolizameApplication.get().getInitParameter("competencia.id"));
 		if (idConcurso == null) {
-			throw new RuntimeException("no está configurado id de concurso");
+			throw new RuntimeException("no está configurado id de competencia");
 		}
-		DaoConcurso dc = new DaoConcurso();
-		concurso = dc.get(idConcurso);
-		if (concurso == null) {
-			throw new RuntimeException("no está creado el objeto concurso");
+		DaoCompetencia dc = new DaoCompetencia();
+		competencia = dc.get(idConcurso);
+		if (competencia == null) {
+			throw new RuntimeException("no está creado el objeto competencia");
 		}
-		fecha = concurso.getFechaSiguiente(new Date());
+		fecha = competencia.getFechaSiguiente(new Date());
 		if (fecha == null) {
 			throw new RuntimeException("no existe próxima fecha");
 		}
