@@ -22,8 +22,7 @@ public abstract class LoginStatusEventBehavior extends AbstractSubscribeBehavior
 	}
 
 	@Override
-	protected void onEvent(final AjaxRequestTarget target, final IRequestParameters parameters,
-	                       final String response) {
+	protected void onEvent(final AjaxRequestTarget target, final IRequestParameters parameters, final String response) {
 		final String status = parameters.getParameterValue(STATUS).toOptionalString();
 		final String userId = parameters.getParameterValue(USER_ID).toOptionalString();
 		final String expiresIn = parameters.getParameterValue(EXPIRES_IN).toOptionalString();
@@ -34,7 +33,7 @@ public abstract class LoginStatusEventBehavior extends AbstractSubscribeBehavior
 	protected abstract void onLoginStatus(AjaxRequestTarget target, String status, String userId, String expiresIn, String accessToken);
 
 	public void renderHead(final Component component, final IHeaderResponse response) {
-		super.renderHead(component, response);
+		log.debug("renderHead");
 		final StringBuilder js = new StringBuilder();
 		js.append("FB.Event.subscribe('").append("xfbml.render").append("', function(response) {");
 		js.append("FB.getLoginStatus(function(response) {");
@@ -53,9 +52,8 @@ public abstract class LoginStatusEventBehavior extends AbstractSubscribeBehavior
 		js.append("Wicket.Ajax.get({'u': callback + '&response=' + Wicket.Form.encode(response)});");
 		js.append("});");
 		js.append("});");
-		log.info(js.toString());
+		log.debug(js.toString());
 		response.render(JavaScriptHeaderItem.forScript(js.toString(), null));
-
 	}
 
 }
