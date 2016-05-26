@@ -19,7 +19,7 @@ import pe.trazos.dominio.Visitante;
 import java.util.Map;
 
 public class HomePageAutentificado extends HomePage {
-
+/*
 	private static final Logger log = LoggerFactory.getLogger(HomePageAutentificado.class);
 
 	Map<Participacion, Pronostico> pronosticos;
@@ -33,14 +33,14 @@ public class HomePageAutentificado extends HomePage {
 	public HomePageAutentificado(PageParameters parameters) {
 		super(parameters);
 		if (!getSesion().isSignedIn()) { // esto está por si acaso no lo redireccione más abajo
-			doLogout();
+			doLogout(null);
 		}
 	}
 
 	protected void agregarDatosPartido(Partido unPartido) {
 		// div para todo el partido
-		WebMarkupContainer wmcPartido = new WebMarkupContainer(repetidor.newChildId());
-		repetidor.add(wmcPartido);
+		WebMarkupContainer wmcPartido = new WebMarkupContainer(partidoRepetidor.newChildId());
+		partidoRepetidor.add(wmcPartido);
 		// div para el fragmento del partido
 		Fragment fragPartido = new Fragment("listItem", "partido", this);
 		fragPartido.add(new Label("fecha", dateFormat.format(unPartido.getFechaPartido())));
@@ -52,8 +52,8 @@ public class HomePageAutentificado extends HomePage {
 	}
 
 	private void agregarGoles(Partido unPartido) {
-		WebMarkupContainer wmcGoles = new WebMarkupContainer(repetidor.newChildId());
-		repetidor.add(wmcGoles);
+		WebMarkupContainer wmcGoles = new WebMarkupContainer(partidoRepetidor.newChildId());
+		partidoRepetidor.add(wmcGoles);
 		Fragment fragGoles = new Fragment("listItem", "goles", this);
 		wmcGoles.add(fragGoles);
 		fragGoles.add(new ContextImage("pelota", "/images/goles.png"));
@@ -68,7 +68,7 @@ public class HomePageAutentificado extends HomePage {
 		agregarUnaEstadistica("Visitante", unPartido, unPartido.getVisita(), fragGoles);
 	}
 
-	protected void agregarUnPartido(Partido unPartido) {
+	protected void crearUnPartido(Partido unPartido) {
 		agregarDatosPartido(unPartido);
 		agregarGoles(unPartido);
 	}
@@ -79,7 +79,6 @@ public class HomePageAutentificado extends HomePage {
 		unContainer.add(new Label("cantStats" + unId, ""));
 	}
 
-	@Override
 	protected void calcularPosiciones() throws RuntimeException {
 		if (getSesion().isSignedIn() && getSesion().getUserId() != null) {
 			// obtener la lista de pronósticos del usuario para la fecha
@@ -89,16 +88,16 @@ public class HomePageAutentificado extends HomePage {
 				throw new RuntimeException("no obtuvo visitante");
 			}
 			DaoPronostico dp = new DaoPronostico();
-			pronosticos = dp.obtenerPronosticosFecha(v, fecha);
+			//pronosticos = dp.obtenerPronosticosFecha(v, fecha);
 			// validar la lista
 			if (pronosticos == null || pronosticos.size() == 0) {
 				throw new RuntimeException("no obtuvo pronósticos");
 			}
 			// calcular posiciones de la tabla con estos pronosticos
-			competencia.crearPosiciones(pronosticos);
+			//competencia.crearPosiciones(pronosticos);
 		} else {
 			// no debería estar en esta página
-			doLogout();
+			doLogout(null);
 		}
 	}
 
@@ -108,11 +107,12 @@ public class HomePageAutentificado extends HomePage {
 		DaoPronostico dp = new DaoPronostico();
 		pronosticos.values().forEach(dp::grabar);
 		// actualizar la tabla
-		competencia.crearPosiciones(pronosticos);
+		//competencia.crearPosiciones(pronosticos);
 	}
 
 	private Pronostico getPronostico(Participacion unaParticipacion) {
 		return pronosticos.get(unaParticipacion);
 	}
+*/
 
 }

@@ -6,9 +6,10 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
+import java.io.Serializable;
 
 @MappedSuperclass
-public abstract class Posicionable implements IObjetoDominio<Integer> {
+public abstract class Posicionable implements Serializable {
 
 	private static final Logger log = LoggerFactory.getLogger(Posicionable.class);
 

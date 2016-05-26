@@ -1,12 +1,13 @@
 package pe.trazos.dominio;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "visitante")
-public class Visitante implements IObjetoDominio<String> {
+public class Visitante implements Serializable {
 
 	@Column(name = "fecha")
 	Date fecha;
@@ -22,7 +23,6 @@ public class Visitante implements IObjetoDominio<String> {
 		return fecha;
 	}
 
-	@Override
 	public String getId() {
 		return userId;
 	}
@@ -43,7 +43,6 @@ public class Visitante implements IObjetoDominio<String> {
 		this.fecha = fecha;
 	}
 
-	@Override
 	public void setId(String unId) {
 		userId = unId;
 	}

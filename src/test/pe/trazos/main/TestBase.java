@@ -11,7 +11,8 @@ public class TestBase {
 
 	Session createSession() {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
-		return sf.getCurrentSession();
+		sesion = sf.getCurrentSession();
+		return sesion;
 	}
 
 }

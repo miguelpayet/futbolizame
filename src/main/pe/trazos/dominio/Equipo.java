@@ -3,12 +3,13 @@ package pe.trazos.dominio;
 import pe.trazos.dao.DaoEquipo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "equipo")
-public class Equipo implements IObjetoDominio<String> {
+public class Equipo implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +19,6 @@ public class Equipo implements IObjetoDominio<String> {
 	private String logo;
 	@Column(name = "nombre")
 	private String nombre;
-	@OneToMany(mappedBy = "equipo", fetch = FetchType.LAZY)
-	private List<Participacion> participaciones;
-	//@OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
-	@Transient
-	List<Posicion> posiciones;
 
 	public Ratio compararCon(Equipo unEquipo) {
 		DaoEquipo de = new DaoEquipo();
@@ -46,14 +42,6 @@ public class Equipo implements IObjetoDominio<String> {
 		return nombre;
 	}
 
-	public List<Participacion> getParticipaciones() {
-		return participaciones;
-	}
-
-	public List<Posicion> getPosiciones() {
-		return posiciones;
-	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -64,14 +52,6 @@ public class Equipo implements IObjetoDominio<String> {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	public void setParticipaciones(List<Participacion> participaciones) {
-		this.participaciones = participaciones;
-	}
-
-	public void setPosiciones(List<Posicion> posiciones) {
-		this.posiciones = posiciones;
 	}
 
 	public String toString() {

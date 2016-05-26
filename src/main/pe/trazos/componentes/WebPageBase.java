@@ -1,11 +1,8 @@
 package pe.trazos.componentes;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.GenericWebPage;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -15,16 +12,16 @@ import org.slf4j.LoggerFactory;
 import org.wicketstuff.facebook.FacebookPermission;
 import org.wicketstuff.facebook.FacebookSdk;
 import org.wicketstuff.facebook.behaviors.AuthLoginEventBehavior;
-import org.wicketstuff.facebook.behaviors.AuthStatusChangeEventBehavior;
 import org.wicketstuff.facebook.behaviors.LogoutEventBehavior;
 import org.wicketstuff.facebook.plugins.LikeButton;
 import org.wicketstuff.facebook.plugins.LoginButton;
 import pe.trazos.auth.SesionFacebook;
+import pe.trazos.homepage.LoginStatusEventBehavior;
 import pe.trazos.web.FutbolizameApplication;
 
 public abstract class WebPageBase extends GenericWebPage {
 
-	private final Logger logger = LoggerFactory.getLogger(WebPageBase.class);
+	private static final Logger log = LoggerFactory.getLogger(WebPageBase.class);
 
 	public WebPageBase() {
 		super();
@@ -48,46 +45,47 @@ public abstract class WebPageBase extends GenericWebPage {
 		add(new AuthLoginEventBehavior() {
 			@Override
 			protected void onSessionEvent(AjaxRequestTarget target, String status, String userId, String signedRequest, String expiresIn, String accessToken) {
-				logger.info("login event");
-				doLogin(userId, accessToken);
+				log.info("login event");
+				doLogin(userId, accessToken, target);
 			}
 		});
+/*
 		add(new AuthStatusChangeEventBehavior() {
 			@Override
 			protected void onSessionEvent(AjaxRequestTarget target, String status, String userId, String signedRequest, String expiresIn, String accessToken) {
-				logger.info(String.format("status change event: %s", status));
-				if (status.equals("connected") && !FutbolizameApplication.get().getHomePageAutentificado().equals(getComponent().getClass())) {
-					doLogin(userId, accessToken);
+				log.info("status change event: " + status);
+				if (status.equals("connected")) {
+					doLogin(userId, accessToken, target);
 				} else if (status.equals("unknown")) {
-					doLogout();
+					doLogout(target);
 				}
 			}
 		});
+		*/
 		add(new LogoutEventBehavior() {
 			@Override
 			protected void onLogout(AjaxRequestTarget target, String status) {
-				logger.info("logout event");
-				doLogout();
+				log.info("logout event");
+				doLogout(target);
+			}
+		});
+		add(new LoginStatusEventBehavior() {
+			@Override
+			protected void onLoginStatus(AjaxRequestTarget target, String status, String userId, String expiresIn, String accessToken) {
+				log.info("login status event: " + status);
+				if (status != null && status.equals("connected")) {
+					doLogin(userId, accessToken, target);
+				} else {
+					log.info("status: " + status);
+					doLogout(target); // esto pinta la tabla anónima
+				}
 			}
 		});
 	}
 
-	private void doLogin(String unUsuario, String unToken) {
-		SesionFacebook sf = getSesion();
-		if (!sf.isSignedIn()) {
-			sf.signIn(unUsuario, unToken);
-			throw new RestartResponseException(FutbolizameApplication.get().getHomePageAutentificado());
-		}
-	}
+	protected abstract void doLogin(String unUsuario, String unToken, AjaxRequestTarget unTarget);
 
-	protected void doLogout() {
-		getSesion().signOut();
-		throw new RestartResponseException(FutbolizameApplication.get().getHomePage());
-	}
-
-	protected void encabezado(String intro) {
-		add(new Label("intro", intro));
-	}
+	protected abstract void doLogout(AjaxRequestTarget unTarget);
 
 	protected void feedback() {
 		FeedbackPanel feedback = new FeedbackPanel("feedback");
@@ -95,7 +93,7 @@ public abstract class WebPageBase extends GenericWebPage {
 	}
 
 	protected SesionFacebook getSesion() {
-		return (SesionFacebook) Session.get();
+		return SesionFacebook.get();
 	}
 
 }

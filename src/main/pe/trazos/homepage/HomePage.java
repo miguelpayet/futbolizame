@@ -1,92 +1,41 @@
 package pe.trazos.homepage;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.DataGridView;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.extensions.markup.html.repeater.data.grid.PropertyPopulator;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pe.trazos.componentes.WebPageBase;
-import pe.trazos.dao.DaoCompetencia;
 import pe.trazos.dao.ProviderPosicion;
-import pe.trazos.dominio.*;
-import pe.trazos.web.FutbolizameApplication;
+import pe.trazos.dominio.Participacion;
+import pe.trazos.dominio.Partido;
+import pe.trazos.dominio.Posicion;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public abstract class HomePage extends WebPageBase {
+public class HomePage extends WebPageBase {
 
-	protected Competencia competencia;
-	protected WebMarkupContainer containerTabla;
-	protected SimpleDateFormat dateFormat;
-	protected Fecha fecha;
-	private final Logger logger = LoggerFactory.getLogger(HomePageAnonimo.class);
-	protected RepeatingView repetidor;
+	protected static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	private static final Logger log = LoggerFactory.getLogger(HomePage.class);
 
-	protected class ConcursoImagePopulator<T> extends PropertyPopulator<T> {
-
-		private String propiedad;
-
-		public ConcursoImagePopulator(String property) {
-			super(property);
-			propiedad = property;
-		}
-
-		@Override
-		public void populateItem(final Item<ICellPopulator<T>> cellItem, final String componentId, final IModel<T> rowModel) {
-			ImagePanel celda = new ImagePanel(componentId, new PropertyModel<>(rowModel, propiedad));
-			cellItem.add(celda);
-		}
-
-	}
-
-	protected class ConcursoPropertyPopulator<T> extends PropertyPopulator<T> {
-
-		private String clase;
-		private String propiedad;
-
-		public ConcursoPropertyPopulator(String unaPropiedad, String unaClase) {
-			super(unaPropiedad);
-			propiedad = unaPropiedad;
-			clase = unaClase;
-		}
-
-		@Override
-		public void populateItem(final Item<ICellPopulator<T>> cellItem, final String componentId, final IModel<T> rowModel) {
-			Label celda = new Label(componentId, new PropertyModel<>(rowModel, propiedad));
-			cellItem.add(celda);
-			cellItem.add(new AttributeModifier("class", clase));
-		}
-
-	}
-
-	protected class FormPartidos extends Form {
-
-		public FormPartidos(String id) {
-			super(id);
-		}
-
-		@Override
-		protected void onSubmit() {
-			formSubmit();
-		}
-
-	}
+	protected ModeloHomePage modelo;
+	private WebMarkupContainer partidoExterior;
+	private Form partidoForm;
+	protected RepeatingView partidoRepetidor;
+	protected WebMarkupContainer tablaExterior;
+	protected DataGridView<Posicion> tablaGrid = null;
+	protected WebMarkupContainer tablaInterior;
+	protected Label tablaTitulo;
 
 	public HomePage() {
 		this(new PageParameters());
@@ -94,43 +43,52 @@ public abstract class HomePage extends WebPageBase {
 
 	public HomePage(PageParameters parameters) {
 		super(parameters);
+		init();
 		initPagina();
-		agregarIntro();
 	}
 
 	protected void agregarIntro() throws RuntimeException {
-		String intro = competencia.getNombre();
-		if (getSesion().isSignedIn()) {
-			intro += " - " + getSesion().getUserName();
-		}
-		add(new Label("intro", intro));
+		add(new Label("intro", modelo.getNombreCompetencia()));
 	}
 
 	protected void agregarPartidos() {
-		Form formPartidos = new FormPartidos("formPartidos");
-		add(formPartidos);
-		repetidor = new RepeatingView("repeater");
-		formPartidos.add(repetidor);
-		formPartidos.add(new AjaxSubmitLink("save", formPartidos) {
+		// nombre de la fecha
+		add(new Label("nombreFecha", new PropertyModel(modelo, "nombreFecha")));
+		// formulario
+		partidoForm = new FormPartidos("formPartidos", this);
+		partidoForm.setOutputMarkupId(true);
+		add(partidoForm);
+		// partidoRepetidor para los partidos
+		partidoRepetidor = new RepeatingView("repeater");
+		partidoForm.add(partidoRepetidor);
+		// contenedor para el botón
+		WebMarkupContainer wmc = new WebMarkupContainer("botonActualizar");
+		wmc.setOutputMarkupId(true);
+		add(wmc);
+		/* botón para grabar
+		partidoForm.add(new AjaxSubmitLink("save", partidoForm) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
-				logger.info("save.onsubmit");
-				target.add(containerTabla);
+				log.info("save.onsubmit");
+				target.add(tablaExterior);
 			}
 		});
-		add(new Label("nombreFecha", fecha.getNombre()));
-		fecha.getPartidos().forEach(this::agregarUnPartido);
+		*/
 	}
 
 	protected void agregarTabla() {
-		List<ICellPopulator<Posicion>> columns = crearColumnas();
-		ProviderPosicion provider = new ProviderPosicion(competencia);
-		DataGridView<Posicion> dgv = new DataGridView<>("rows", columns, provider);
-		dgv.setOutputMarkupId(true);
-		containerTabla = new WebMarkupContainer("containerTabla");
-		containerTabla.setOutputMarkupId(true);
-		containerTabla.add(dgv);
-		add(containerTabla);
+		// título de la tabla
+		tablaTitulo = new Label("tituloTabla", new PropertyModel<String>(modelo, "tituloTabla"));
+		tablaTitulo.setOutputMarkupId(true);
+		add(tablaTitulo);
+		// elemento exterior para la tabla
+		tablaExterior = new WebMarkupContainer("exteriorTabla");
+		tablaExterior.setOutputMarkupId(true);
+		add(tablaExterior);
+		// contenedor para la tabla
+		tablaInterior = new WebMarkupContainer("interiorTabla");
+		tablaInterior.setOutputMarkupId(true);
+		tablaExterior.add(tablaInterior);
 	}
 
 	protected void agregarUnEquipo(String unId, Partido unPartido, Participacion unaPartic, WebMarkupContainer unContainer) {
@@ -140,46 +98,118 @@ public abstract class HomePage extends WebPageBase {
 		unContainer.add(fragCelda);
 	}
 
-	protected abstract void agregarUnPartido(Partido unPartido);
+	protected void agregarUnaEstadistica(String unId, Partido unPartido, Participacion unaParticipacion, Fragment unContainer) {
+	}
 
-	protected abstract void agregarUnaEstadistica(String unId, Partido unPartido, Participacion unaParticipacion, Fragment unContainer);
-
-	protected abstract void calcularPosiciones();
+	private void calcularPosiciones() {
+		modelo.crearPosiciones();
+	}
 
 	private List<ICellPopulator<Posicion>> crearColumnas() {
 		List<ICellPopulator<Posicion>> columns = new ArrayList<>();
-		columns.add(new ConcursoImagePopulator<>("logo"));
-		columns.add(new ConcursoPropertyPopulator<>("equipo", "nombre"));
-		columns.add(new ConcursoPropertyPopulator<>("puntos", "puntos"));
-		columns.add(new ConcursoPropertyPopulator<>("partidosJugados", "partidos"));
-		columns.add(new ConcursoPropertyPopulator<>("partidosGanados", "partidos"));
-		columns.add(new ConcursoPropertyPopulator<>("partidosEmpatados", "partidos"));
-		columns.add(new ConcursoPropertyPopulator<>("partidosPerdidos", "partidos"));
-		columns.add(new ConcursoPropertyPopulator<>("golesFavor", "goles"));
-		columns.add(new ConcursoPropertyPopulator<>("golesContra", "goles"));
-		columns.add(new ConcursoPropertyPopulator<>("diferenciaGoles", "goles-diferencia"));
+		columns.add(new ImagePopulatorCompetencia<>("logo"));
+		columns.add(new PropertyPopulatorCompetencia<>("equipo", "nombre"));
+		columns.add(new PropertyPopulatorCompetencia<>("puntos", "puntos"));
+		columns.add(new PropertyPopulatorCompetencia<>("partidosJugados", "partidos"));
+		columns.add(new PropertyPopulatorCompetencia<>("partidosGanados", "partidos"));
+		columns.add(new PropertyPopulatorCompetencia<>("partidosEmpatados", "partidos"));
+		columns.add(new PropertyPopulatorCompetencia<>("partidosPerdidos", "partidos"));
+		columns.add(new PropertyPopulatorCompetencia<>("golesFavor", "goles"));
+		columns.add(new PropertyPopulatorCompetencia<>("golesContra", "goles"));
+		columns.add(new PropertyPopulatorCompetencia<>("diferenciaGoles", "goles-diferencia"));
 		return columns;
 	}
 
-	protected abstract void formSubmit();
-
-	protected void initPagina() throws RuntimeException {
-		dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		Integer idConcurso = Integer.valueOf(FutbolizameApplication.get().getInitParameter("competencia.id"));
-		if (idConcurso == null) {
-			throw new RuntimeException("no está configurado id de competencia");
+	private void crearPartidos() {
+		RepeatingView nuevoRepetidor = new RepeatingView("repeater");
+		nuevoRepetidor.setOutputMarkupId(true);
+		for (Partido p : modelo.getPartidos()) {
+			crearUnPartido(p, nuevoRepetidor);
 		}
-		DaoCompetencia dc = new DaoCompetencia();
-		competencia = dc.get(idConcurso);
-		if (competencia == null) {
-			throw new RuntimeException("no está creado el objeto competencia");
-		}
-		fecha = competencia.getFechaSiguiente(new Date());
-		if (fecha == null) {
-			throw new RuntimeException("no existe próxima fecha");
-		}
-		calcularPosiciones();
+		partidoRepetidor.replaceWith(nuevoRepetidor);
+		partidoForm.add(nuevoRepetidor);
 	}
 
+	private void crearTabla() {
+		if (tablaGrid == null) {
+			Fragment fragTabla = new Fragment("interiorTabla", "tabla-posiciones", this);
+			List<ICellPopulator<Posicion>> columns = crearColumnas();
+			ProviderPosicion provider = new ProviderPosicion(modelo);
+			tablaGrid = new DataGridView<>("rows", columns, provider);
+			tablaGrid.setOutputMarkupId(true);
+			fragTabla.add(tablaGrid);
+			tablaInterior.replaceWith(fragTabla);
+			tablaExterior.add(fragTabla);
+		}
+	}
+
+	protected void crearUnPartido(Partido unPartido, RepeatingView unRepetidor) {
+		// container para el partido
+		partidoExterior = new WebMarkupContainer(unRepetidor.newChildId());
+		partidoExterior.setOutputMarkupId(true);
+		unRepetidor.add(partidoExterior);
+		// fragmento con datos del partido
+		Fragment fragPartido = new Fragment("listItem", "partido", this);
+		partidoExterior.add(fragPartido);
+		fragPartido.add(new Label("fecha", dateFormat.format(unPartido.getFechaPartido())));
+		WebMarkupContainer fragEquipos = new WebMarkupContainer("filaPartido");
+		fragPartido.add(fragEquipos);
+		agregarUnEquipo("Local", unPartido, unPartido.getLocal(), fragEquipos);
+		agregarUnEquipo("Visitante", unPartido, unPartido.getVisita(), fragEquipos);
+	/*
+		WebMarkupContainer wmcGoles = new WebMarkupContainer(partidoRepetidor.newChildId());
+		partidoRepetidor.add(wmcGoles);
+		Fragment fragGoles = new Fragment("listItem", "goles", this);
+		wmcGoles.add(fragGoles);
+		fragGoles.add(new ContextImage("pelota", "/images/goles.png"));
+		fragGoles.add(new TextField<>("golesLocal", new PropertyModel<>(unPartido.getLocal(), "goles")));
+		fragGoles.add(new TextField<>("golesVisita", new PropertyModel<>(unPartido.getVisita(), "goles")));
+		agregarUnaEstadistica("Local", unPartido, unPartido.getLocal(), fragGoles);
+		agregarUnaEstadistica("Visitante", unPartido, unPartido.getVisita(), fragGoles);
+	*/
+	}
+
+	@Override
+	protected void doLogin(String unUsuario, String unToken, AjaxRequestTarget unTarget) {
+		if (!getSesion().isSignedIn()) {
+			if (getSesion().signIn(unUsuario, unToken)) {
+				calcularPosiciones();
+				// tabla de posiciones
+				crearTabla();
+				// elementos a refrescar
+				unTarget.add(tablaTitulo);
+				unTarget.add(tablaExterior);
+			}
+		}
+	}
+
+	@Override
+	protected void doLogout(AjaxRequestTarget unTarget) {
+		getSesion().signOut();
+		// tabla de posiciones
+		calcularPosiciones();
+		crearTabla();
+		// partidos
+		crearPartidos();
+		// elementos a refrescar
+		unTarget.add(tablaTitulo);
+		unTarget.add(tablaExterior);
+		unTarget.add(partidoForm);
+	}
+
+	protected void formSubmit() {
+		log.info("formSubmit");
+	}
+
+	private void init() {
+		modelo = new ModeloHomePage();
+	}
+
+	private void initPagina() throws RuntimeException {
+		calcularPosiciones();
+		agregarIntro();
+		agregarTabla();
+		agregarPartidos();
+	}
 
 }

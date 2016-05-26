@@ -2,10 +2,12 @@ package pe.trazos.dominio;
 
 import pe.trazos.dao.DaoPronostico;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
-public class PronosticoFecha {
+@Deprecated
+public class PronosticoFecha implements Serializable {
 
 	private Fecha fecha;
 	Map<Participacion, Pronostico> pronosticos;

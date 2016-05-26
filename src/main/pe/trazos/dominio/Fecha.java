@@ -1,13 +1,14 @@
 package pe.trazos.dominio;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "fecha")
-public class Fecha implements IObjetoDominio<Integer>, Comparable<Fecha> {
+public class Fecha implements Serializable, Comparable<Fecha> {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idconcurso")
@@ -22,7 +23,7 @@ public class Fecha implements IObjetoDominio<Integer>, Comparable<Fecha> {
 	private String nombre;
 	@Column(name = "numero")
 	private Integer numero;
-	@OneToMany(mappedBy = "fecha", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "fecha", cascade = CascadeType.ALL)
 	private Set<Partido> partidos;
 
 	public Fecha() {

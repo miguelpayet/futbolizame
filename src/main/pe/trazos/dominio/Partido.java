@@ -1,13 +1,14 @@
 package pe.trazos.dominio;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "partido")
-public class Partido implements IObjetoDominio<Integer> {
+public class Partido implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idfecha")
@@ -18,7 +19,7 @@ public class Partido implements IObjetoDominio<Integer> {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idpartido")
 	private Integer id;
-	@OneToMany(mappedBy = "partido", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "partido", cascade = CascadeType.ALL)
 	@MapKey(name = "local")
 	private Map<Boolean, Participacion> participantes;
 
@@ -30,17 +31,6 @@ public class Partido implements IObjetoDominio<Integer> {
 			empate = (local.getGoles().equals(visita.getGoles()));
 		}
 		return empate;
-	}
-
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(getLocal().getEquipo().getNombre());
-		sb.append(" vs. ");
-		sb.append(getVisita().getEquipo().getNombre());
-		sb.append(" (");
-		sb.append(getFecha().getFecha());
-		sb.append(")");
-		return sb.toString();
 	}
 
 	public Boolean esValido() {
@@ -125,6 +115,10 @@ public class Partido implements IObjetoDominio<Integer> {
 
 	public Boolean tieneResultado() {
 		return getLocal().tieneGoles() && getVisita().tieneGoles();
+	}
+
+	public String toString() {
+		return String.format("%s vs %s (%s)", getLocal().getEquipo().getNombre(), getVisita().getEquipo().getNombre(), getFecha().getFecha());
 	}
 
 }

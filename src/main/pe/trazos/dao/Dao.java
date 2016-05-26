@@ -4,13 +4,12 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import pe.trazos.dominio.IObjetoDominio;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class Dao<T extends IObjetoDominio> {
+public abstract class Dao<T> {
 
 	private static HashMap<Class, Class<? extends Dao>> listaDaos;
 

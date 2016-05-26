@@ -3,17 +3,19 @@ package pe.trazos.dominio;
 import org.hibernate.annotations.SortComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pe.trazos.dao.DaoPronostico;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedSet;
 
 @Entity
-@Table(name = "competencia")
+@Table(name = "concurso")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Competencia implements IObjetoDominio<Integer> {
+public class Competencia implements Serializable {
 
 	static final int PUNTOS_DERROTA = 0;
 	static final int PUNTOS_EMPATE = 1;
@@ -34,19 +36,40 @@ public class Competencia implements IObjetoDominio<Integer> {
 	@Column(name = "numero")
 	private Integer numero;
 	@Transient
-	Map<Equipo, Posicion> posiciones;
+	Map<String, Posicion> posiciones;
+	@Transient
+	Visitante visitante;
 
 	public Competencia() {
 		posiciones = new HashMap<>();
 	}
 
-	public void crearPosiciones() {
-		crearPosiciones(null);
+	public void clearVisitante() {
+		visitante = null;
 	}
 
-	// en vez de recibir la lista de pronosticos podría recibir el userid e irlos recogiendo de la bd
-	// pero como ya los tengo en memoria (los pronosticos de una fecha)
-	// ¿qué pasa cuando sean varias fechas? transicionar a leer de la BD
+	public void crearPosiciones() {
+		log.debug("crear posiciones");
+		resetPosiciones();
+		for (Fecha fec : fechas) {
+			log.debug("fecha {}", fec);
+			for (Partido partido : fec.getPartidos()) {
+				log.trace("partido {}", partido);
+				Map<Boolean, Participacion> participantes = partido.getParticipantes();
+				// buscar los pronosticos y armar el mapa de pronosticos
+				Map<Boolean, Pronostico> pronosticoPartido = obtenerPronosticos(participantes);
+				// calcular las posiciones para los 2 participantes
+				if (pronosticoPartido != null) {
+					crearUnaPosicion(pronosticoPartido);
+				} else {
+					crearUnaPosicion(participantes);
+				}
+			}
+		}
+		log.debug("posiciones: " + posiciones.size());
+	}
+
+	@Deprecated
 	public void crearPosiciones(Map<Participacion, Pronostico> pronosticos) {
 		log.debug("crear posiciones");
 		resetPosiciones();
@@ -69,9 +92,8 @@ public class Competencia implements IObjetoDominio<Integer> {
 	}
 
 	private void crearUnaPosicion(Map<Boolean, ? extends Posicionable> unosParticipantes) {
-		// quiero que se asimile en la posicion cada uno de los pronosticios & participaciones
-		// en la participacion está relacionado a través del partido
-		// pero en el pronóstico no y por eso vienen en pares
+		// quiero que se asimile en la posicion cada uno de los pronosticos o participaciones
+		// en la participacion está relacionado a través del partido, pero en el pronóstico no y por eso vienen en pares
 		for (Map.Entry<Boolean, ? extends Posicionable> partEntry : unosParticipantes.entrySet()) {
 			Posicionable participante = partEntry.getValue();
 			Posicion posicion = obtenerPosicion(participante);
@@ -82,6 +104,15 @@ public class Competencia implements IObjetoDominio<Integer> {
 
 	public Date getActualizado() {
 		return actualizado;
+	}
+
+	public Fecha getFechaSiguiente(Date unaFecha) {
+		for (Fecha fecha : fechas) {
+			if (fecha.getFecha().compareTo(unaFecha) > 0) {
+				return fecha;
+			}
+		}
+		return null;
 	}
 
 	public SortedSet<Fecha> getFechas() {
@@ -100,29 +131,43 @@ public class Competencia implements IObjetoDominio<Integer> {
 		return numero;
 	}
 
-	public Map<Equipo, Posicion> getPosiciones() {
+	public Map<String, Posicion> getPosiciones() {
 		return posiciones;
 	}
 
-	public Fecha getFechaSiguiente(Date unaFecha) {
-		for (Fecha fecha : fechas) {
-			if (fecha.getFecha().compareTo(unaFecha) > 0) {
-				return fecha;
-			}
-		}
-		return null;
-	}
-
 	private Posicion obtenerPosicion(Posicionable unPosicionable) {
-		Posicion posi = posiciones.get(unPosicionable.getEquipo());
+		Posicion posi = posiciones.get(unPosicionable.getEquipo().getNombre());
 		if (posi == null) {
 			posi = new Posicion();
 			posi.setEquipo(unPosicionable.getEquipo());
-			posiciones.put(unPosicionable.getEquipo(), posi);
+			posiciones.put(unPosicionable.getEquipo().getNombre(), posi);
+			log.debug("crear posición " + posi);
 		}
 		return posi;
 	}
 
+	private Map<Boolean, Pronostico> obtenerPronosticos(Map<Boolean, Participacion> participantes) {
+		Map<Boolean, Pronostico> pronosticoPartido = null;
+		if (visitante != null) {
+			pronosticoPartido = new HashMap<>();
+			DaoPronostico dp = new DaoPronostico();
+			for (Map.Entry<Boolean, Participacion> partEntry : participantes.entrySet()) {
+				Participacion participante = partEntry.getValue();
+				PronosticoPK pk = new PronosticoPK();
+				pk.setParticipacion(participante);
+				pk.setVisitante(visitante);
+				Pronostico pro = dp.get(pk);
+				if (pro != null) {
+					pronosticoPartido.put(partEntry.getKey(), pro);
+				} else {
+					return null;
+				}
+			}
+		}
+		return pronosticoPartido;
+	}
+
+	@Deprecated
 	private Map<Boolean, Pronostico> obtenerPronosticos(Map<Boolean, Participacion> participantes, Map<Participacion, Pronostico> pronosticos) {
 		Map<Boolean, Pronostico> pronosticoPartido = null;
 		if (pronosticos != null) {
@@ -134,8 +179,8 @@ public class Competencia implements IObjetoDominio<Integer> {
 					pronosticoPartido.put(partEntry.getKey(), pro);
 				}
 			}
-			// si no tengo dos pronosticos prefiero que sea null
 			if (pronosticoPartido.size() != 2) {
+				// lo más probable es que nunca pase por aquí
 				pronosticoPartido = null;
 			}
 		}
@@ -143,10 +188,10 @@ public class Competencia implements IObjetoDominio<Integer> {
 	}
 
 	private void resetPosiciones() {
-		if (posiciones == null) {
-			posiciones = new HashMap<>();
-		}
-		posiciones.values().forEach(Posicion::reset);
+		//if (posiciones == null) {
+		posiciones = new HashMap<>();
+		//}
+		//posiciones.values().forEach(Posicion::reset);
 	}
 
 	public void setActualizado(Date actualizado) {
@@ -157,10 +202,6 @@ public class Competencia implements IObjetoDominio<Integer> {
 		this.fechas = fechas;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
@@ -169,40 +210,9 @@ public class Competencia implements IObjetoDominio<Integer> {
 		this.numero = numero;
 	}
 
-	public void setPosiciones(Map<Equipo, Posicion> posiciones) {
-		this.posiciones = posiciones;
+	public void setVisitante(Visitante unVisitante) {
+		visitante = unVisitante;
 	}
 
-	/*
-	public void zcrearPosicionesAnterior(Map<Participacion, Pronostico> pronosticos) {
-		log.debug("crear posiciones");
-		resetPosiciones();
-		for (Fecha fec : fechas) {
-			log.debug("fecha {}", fec);
-			for (Partido partido : fec.getPartidos()) {
-				for (Participacion partic : partido.getParticipantes().values()) {
-					Posicion posi = posiciones.get(partic.getEquipo());
-					if (posi == null) {
-						posi = new Posicion();
-						posi.setEquipo(partic.getEquipo());
-						posiciones.put(partic.getEquipo(), posi);
-					}
-					posi.setCompetencia(this);
-					Pronostico pro = null;
-					if (pronosticos != null) {
-						pro = pronosticos.get(partic);
-					}
-					if (pro != null) {
-						log.debug("usando pronostico {}", pro);
-						posi.actualizarCon(pro);
-					} else {
-						posi.actualizarCon(partic);
-					}
-				}
-			}
-		}
-		log.debug("posiciones: " + posiciones.size());
-	}
-	*/
 
 }

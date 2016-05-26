@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "participacion")
 public class Participacion extends Posicionable {
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "idequipo")
 	private Equipo equipo;
 	@Id
@@ -38,7 +38,6 @@ public class Participacion extends Posicionable {
 		return golesFavor;
 	}
 
-	@Override
 	public Integer getId() {
 		return id;
 	}
@@ -70,11 +69,6 @@ public class Participacion extends Posicionable {
 
 	public void setEquipo(Equipo equipo) {
 		this.equipo = equipo;
-	}
-
-	@Override
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	@Override

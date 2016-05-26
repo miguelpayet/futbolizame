@@ -20,7 +20,7 @@ import static org.junit.Assert.assertThat;
 
 public class TestEquipo extends TestBase {
 
-	@Test
+/*	@Test
 	public void leerPartidosPeru() {
 		Session sesion = createSession();
 		Transaction tran = sesion.beginTransaction();
@@ -35,7 +35,7 @@ public class TestEquipo extends TestBase {
 		}
 		tran.rollback();
 		System.out.println(String.format("partidos: %s", partidos));
-	}
+	}*/
 
 	@Test
 	public void leerPeru() {

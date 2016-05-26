@@ -4,6 +4,7 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Version;
 import com.restfb.types.User;
+import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
@@ -16,10 +17,15 @@ import java.util.Date;
 
 public class SesionFacebook extends AuthenticatedWebSession {
 
-	private final Logger logger = LoggerFactory.getLogger(SesionFacebook.class);
-	private String token;
+	private static final Logger log = LoggerFactory.getLogger(SesionFacebook.class);
+
+	public static SesionFacebook get() {
+		return (SesionFacebook) Session.get();
+	}
+
 	private String userId;
 	private String userName;
+	private Visitante visitante;
 
 	public SesionFacebook(Request unRequest) {
 		super(unRequest);
@@ -27,15 +33,16 @@ public class SesionFacebook extends AuthenticatedWebSession {
 
 	@Override
 	protected boolean authenticate(String unUserId, String unToken) {
-		logger.info("userid: " + unUserId);
+		log.info("userid: " + unUserId);
 		try {
 			if (unUserId == null || unToken == null) {
+				this.signOut();
 				return false;
 			}
 			if (!unUserId.equals(userId)) {
 				this.signOut();
 			}
-			token = unToken;
+			String token = unToken;
 			userId = unUserId;
 			// validar el token
 			FacebookClient client = new DefaultFacebookClient(unToken, Version.LATEST);
@@ -44,19 +51,19 @@ public class SesionFacebook extends AuthenticatedWebSession {
 			userName = user.getName();
 			// crear o actualizar el registro de bd
 			DaoVisitante dv = new DaoVisitante();
-			Visitante visitaBd = dv.get(unUserId);
-			if (visitaBd == null) {
-				visitaBd = new Visitante();
-				visitaBd.setId(unUserId);
-				visitaBd.setNombre(user.getName());
+			visitante = dv.get(unUserId);
+			if (visitante == null) {
+				visitante = new Visitante();
+				visitante.setId(unUserId);
+				visitante.setNombre(user.getName());
 			}
-			visitaBd.setFecha(new Date());
-			visitaBd.setToken(token);
-			dv.grabar(visitaBd);
-			logger.info("nombre: " + userName);
+			visitante.setFecha(new Date());
+			visitante.setToken(token);
+			dv.grabar(visitante);
+			log.info("nombre: " + userName);
 			return true;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			log.error(e.getMessage());
 			//todo: algún tipo de feedback
 			return false;
 		}
@@ -73,6 +80,10 @@ public class SesionFacebook extends AuthenticatedWebSession {
 
 	public String getUserName() {
 		return userName;
+	}
+
+	public Visitante getVisitante() {
+		return visitante;
 	}
 
 }

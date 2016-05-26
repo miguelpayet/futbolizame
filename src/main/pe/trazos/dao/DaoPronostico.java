@@ -14,6 +14,11 @@ public class DaoPronostico extends Dao<Pronostico> {
 		super(Pronostico.class);
 	}
 
+	public Pronostico get(PronosticoPK unaPk) {
+		return getSession().get(Pronostico.class, unaPk);
+	}
+
+	@Deprecated
 	public Pronostico get(Visitante unVisitante, Participacion unaParticipacion) {
 		Criteria criteria = getSession().createCriteria(getClaseEntidad());
 		criteria.add(Restrictions.and(

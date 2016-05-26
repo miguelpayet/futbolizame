@@ -16,7 +16,7 @@ import pe.trazos.dominio.Ratio;
 public class HomePageAnonimo extends HomePage {
 
 	private static final Logger log = LoggerFactory.getLogger(HomePageAnonimo.class);
-
+/*
 	public HomePageAnonimo() {
 		this(new PageParameters());
 	}
@@ -27,9 +27,9 @@ public class HomePageAnonimo extends HomePage {
 		agregarPartidos();
 	}
 
-	protected void agregarUnPartido(Partido unPartido) {
-		WebMarkupContainer wmcPartido = new WebMarkupContainer(repetidor.newChildId());
-		repetidor.add(wmcPartido);
+	protected void crearUnPartido(Partido unPartido) {
+		WebMarkupContainer wmcPartido = new WebMarkupContainer(partidoRepetidor.newChildId());
+		partidoRepetidor.add(wmcPartido);
 		Fragment fragPartido = new Fragment("listItem", "partido", this);
 		wmcPartido.add(fragPartido);
 		fragPartido.add(new Label("fecha", dateFormat.format(unPartido.getFechaPartido())));
@@ -37,8 +37,8 @@ public class HomePageAnonimo extends HomePage {
 		fragPartido.add(fragEquipos);
 		agregarUnEquipo("Local", unPartido, unPartido.getLocal(), fragEquipos);
 		agregarUnEquipo("Visitante", unPartido, unPartido.getVisita(), fragEquipos);
-		WebMarkupContainer wmcGoles = new WebMarkupContainer(repetidor.newChildId());
-		repetidor.add(wmcGoles);
+		WebMarkupContainer wmcGoles = new WebMarkupContainer(partidoRepetidor.newChildId());
+		partidoRepetidor.add(wmcGoles);
 		Fragment fragGoles = new Fragment("listItem", "goles", this);
 		wmcGoles.add(fragGoles);
 		fragGoles.add(new ContextImage("pelota", "/images/goles.png"));
@@ -60,12 +60,13 @@ public class HomePageAnonimo extends HomePage {
 	}
 
 	protected void calcularPosiciones() {
-		competencia.crearPosiciones();
+//		modelo.crearPosiciones();
 	}
 
 	protected void formSubmit() {
 		log.info("anonimo.formsubmit");
-		competencia.crearPosiciones();
+//		competencia.crearPosiciones();
 	}
+*/
 
 }

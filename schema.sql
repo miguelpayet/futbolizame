@@ -84,7 +84,7 @@ CREATE TABLE `participacion` (
   KEY `fk_participante_partido1_idx` (`idpartido`),
   CONSTRAINT `fk_participante_partido1` FOREIGN KEY (`idpartido`) REFERENCES `partido` (`idpartido`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_partido_equipo1` FOREIGN KEY (`idequipo`) REFERENCES `equipo` (`idequipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3163 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+w) ENGINE=InnoDB AUTO_INCREMENT=3100 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,7 +148,7 @@ CREATE TABLE `pronostico` (
   KEY `fk_pronostico_participacion1_idx` (`idparticipacion`),
   CONSTRAINT `fk_pronostico_participacion1` FOREIGN KEY (`idparticipacion`) REFERENCES `participacion` (`idparticipacion`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_pronostico_visitante1` FOREIGN KEY (`userid`) REFERENCES `visitante` (`userid`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -230,6 +230,8 @@ DROP TABLE IF EXISTS `visitante`;
 CREATE TABLE `visitante` (
   `userid` varchar(45) NOT NULL,
   `nombre` varchar(45) DEFAULT NULL,
+  `fecha` datetime DEFAULT NULL,
+  `token` varchar(512) DEFAULT NULL,
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -243,4 +245,4 @@ CREATE TABLE `visitante` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-16 22:06:35
+-- Dump completed on 2016-05-19 19:19:10

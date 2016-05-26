@@ -4,20 +4,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "pronostico")
-public class Pronostico extends Posicionable {
+@IdClass(PronosticoPK.class)
+public class Pronostico extends Posicionable implements Serializable {
 
 	private static final Logger log = LoggerFactory.getLogger(Pronostico.class);
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "idpronostico")
-	private Integer id;
 	@ManyToOne()
 	@JoinColumn(name = "idparticipacion")
 	private Participacion participacion;
+	@Id
 	@ManyToOne()
 	@JoinColumn(name = "userid")
 	private Visitante visitante;
@@ -25,11 +25,6 @@ public class Pronostico extends Posicionable {
 	@Override
 	protected Equipo getEquipo() {
 		return getParticipacion().getEquipo();
-	}
-
-	@Override
-	public Integer getId() {
-		return id;
 	}
 
 	public Participacion getParticipacion() {
@@ -43,11 +38,6 @@ public class Pronostico extends Posicionable {
 
 	public Visitante getVisitante() {
 		return visitante;
-	}
-
-	@Override
-	public void setId(Integer unId) {
-		id = unId;
 	}
 
 	public void setParticipacion(Participacion participacion) {

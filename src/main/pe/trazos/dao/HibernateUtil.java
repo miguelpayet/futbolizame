@@ -29,9 +29,7 @@ public class HibernateUtil {
 		configuration.addAnnotatedClass(Fecha.class);
 		configuration.addAnnotatedClass(Participacion.class);
 		configuration.addAnnotatedClass(Partido.class);
-		//configuration.addAnnotatedClass(Posicion.class);
 		configuration.addAnnotatedClass(Pronostico.class);
-		configuration.addAnnotatedClass(Rol.class);
 		configuration.addAnnotatedClass(Visitante.class);
 	}
 
