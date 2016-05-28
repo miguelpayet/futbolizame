@@ -1,37 +1,26 @@
 <wicket:extend xmlns:wicket="">
     <!-- tabla -->
-    <div class="row">
-        <div class="col-md-6">
-            <div class="row">
-                <div wicket:id="tituloTabla" class="col-md-12">
-                    tabla de posiciones
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12" wicket:id="exteriorTabla">
-                    <span wicket:id="interiorTabla"></span>
-                </div>
+    <div wicket:id="exterior-tabla">
+        <span wicket:id="panel-tabla"></span>
+    </div>
+    <!-- partidos -->
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12">
+                <span wicket:id="nombre-fecha"></span>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="row">
-                <div class="col-md-12">
-                    <span wicket:id="nombreFecha"></span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 partidos">
-                    <form wicket:id="formPartidos">
-                        <div class="repetidor" wicket:id="repeater">
-                            <div wicket:id="listItem"></div>
-                        </div>
-                    </form>
+        <div class="row">
+            <div class="col-md-12 partidos">
+                <form wicket:id="form-partidos">
+                    <div class="repetidor" wicket:id="repeater">
+                        <div wicket:id="listItem"></div>
+                    </div>
+                </form>
                     <span wicket:id="botonActualizar">
                     </span>
-                </div>
             </div>
         </div>
-
     </div>
     <!-- fragmentos -->
     <wicket:fragment wicket:id="partido">
@@ -79,27 +68,6 @@
                 (<span wicket:id="cantStatsVisitante"></span> partidos)
             </div>
         </div>
-    </wicket:fragment>
-    <wicket:fragment wicket:id="tabla-posiciones">
-        <table class="tabla">
-            <thead>
-            <td>&nbsp;</td>
-            <td>país</td>
-            <td>puntos</td>
-            <td>p.j.</td>
-            <td>p.g.</td>
-            <td>p.e.</td>
-            <td>p.p.</td>
-            <td>g.f.</td>
-            <td>g.c.</td>
-            <td>d.g.</td>
-            </thead>
-            <tr wicket:id="rows">
-                <td wicket:id="cells">
-                    <span wicket:id="cell"/>
-                </td>
-            </tr>
-        </table>
     </wicket:fragment>
     <wicket:fragment wicket:id="boton-actualizar">
         <div class="row">
