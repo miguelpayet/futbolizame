@@ -23,7 +23,7 @@ public class Fecha implements Serializable, Comparable<Fecha> {
 	private String nombre;
 	@Column(name = "numero")
 	private Integer numero;
-	@OneToMany(mappedBy = "fecha", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "fecha", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Partido> partidos;
 
 	public Fecha() {
@@ -76,10 +76,6 @@ public class Fecha implements Serializable, Comparable<Fecha> {
 
 	public void setNumero(Integer numero) {
 		this.numero = numero;
-	}
-
-	public void setPartidos(Set<Partido> partidos) {
-		this.partidos = partidos;
 	}
 
 	@Override

@@ -94,6 +94,7 @@ public class Competencia implements Serializable {
 	private void crearUnaPosicion(Map<Boolean, ? extends Posicionable> unosParticipantes) {
 		// quiero que se asimile en la posicion cada uno de los pronosticos o participaciones
 		// en la participacion está relacionado a través del partido, pero en el pronóstico no y por eso vienen en pares
+		log.debug("crear una posición");
 		for (Map.Entry<Boolean, ? extends Posicionable> partEntry : unosParticipantes.entrySet()) {
 			Posicionable participante = partEntry.getValue();
 			Posicion posicion = obtenerPosicion(participante);
@@ -133,6 +134,10 @@ public class Competencia implements Serializable {
 
 	public Map<String, Posicion> getPosiciones() {
 		return posiciones;
+	}
+
+	public String getTitulo() {
+		return "tabla de posiciones " + (nombre != null ? nombre : "");
 	}
 
 	private Posicion obtenerPosicion(Posicionable unPosicionable) {
@@ -188,10 +193,7 @@ public class Competencia implements Serializable {
 	}
 
 	private void resetPosiciones() {
-		//if (posiciones == null) {
 		posiciones = new HashMap<>();
-		//}
-		//posiciones.values().forEach(Posicion::reset);
 	}
 
 	public void setActualizado(Date actualizado) {

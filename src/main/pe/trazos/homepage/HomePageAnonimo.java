@@ -60,7 +60,7 @@ public class HomePageAnonimo extends HomePage {
 	}
 
 	protected void calcularPosiciones() {
-//		modelo.crearPosiciones();
+//		competencia.crearPosiciones();
 	}
 
 	protected void formSubmit() {

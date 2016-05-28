@@ -87,12 +87,12 @@ public class ModeloCompetencia extends LoadableDetachableModel<Competencia> {
 
 	@Override
 	protected void onAttach() {
-		log.info("onAttach");
+		log.debug("onAttach");
 	}
 
 	@Override
 	protected void onDetach() {
-		log.info("onDetach");
+		log.debug("onDetach");
 		idCompetencia = getObject().getId();
 	}
 

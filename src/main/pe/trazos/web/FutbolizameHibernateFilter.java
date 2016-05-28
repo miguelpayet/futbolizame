@@ -12,11 +12,11 @@ import java.io.IOException;
 
 public class FutbolizameHibernateFilter implements Filter {
 
-	private final Logger logger = LoggerFactory.getLogger(FutbolizameHibernateFilter.class);
+	private static final Logger log = LoggerFactory.getLogger(FutbolizameHibernateFilter.class);
 
 	@Override
 	public void destroy() {
-		logger.info("FutbolizameHibernateFilter.destroy");
+		log.info("destroy");
 	}
 
 	@Override
@@ -25,10 +25,10 @@ public class FutbolizameHibernateFilter implements Filter {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session sesion = sf.getCurrentSession();
 		try {
-			logger.debug("FutbolizameHibernateFilter.doFilter.beginTransaction");
+			log.info("doFilter - beginTransaction");
 			sesion.beginTransaction();
 			chain.doFilter(request, response);
-			logger.debug("FutbolizameHibernateFilter.doFilter.commit");
+			log.info("doFilter - commit");
 			sesion.getTransaction().commit();
 		} catch (Throwable ex) {
 			try {
@@ -36,7 +36,7 @@ public class FutbolizameHibernateFilter implements Filter {
 					sesion.getTransaction().rollback();
 				}
 			} catch (Throwable rbEx) {
-				logger.error("Could not rollback after exception!", rbEx);
+				log.error("Could not rollback after exception!", rbEx);
 				rbEx.printStackTrace();
 			}
 			throw new ServletException(ex);
@@ -46,7 +46,7 @@ public class FutbolizameHibernateFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		logger.info("FutbolizameHibernateFilter.init");
+		log.info("FutbolizameHibernateFilter.init");
 	}
 
 }

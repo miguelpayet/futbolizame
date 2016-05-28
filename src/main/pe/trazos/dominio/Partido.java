@@ -19,7 +19,7 @@ public class Partido implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idpartido")
 	private Integer id;
-	@OneToMany(mappedBy = "partido", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "partido", cascade = CascadeType.ALL) //, fetch = FetchType.EAGER)
 	@MapKey(name = "local")
 	private Map<Boolean, Participacion> participantes;
 
