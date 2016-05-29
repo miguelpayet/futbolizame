@@ -12,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pe.trazos.auth.SesionFacebook;
 import pe.trazos.homepage.HomePage;
-import pe.trazos.homepage.HomePageAnonimo;
-import pe.trazos.homepage.HomePageAutentificado;
 
 public class FutbolizameApplication extends AuthenticatedWebApplication {
 
@@ -29,10 +27,6 @@ public class FutbolizameApplication extends AuthenticatedWebApplication {
 	@Override
 	public Class<? extends WebPage> getHomePage() {
 		return HomePage.class;
-	}
-
-	public Class<? extends WebPage> getHomePageAutentificado() {
-		return HomePageAutentificado.class;
 	}
 
 	@Override

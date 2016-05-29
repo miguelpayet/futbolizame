@@ -1,14 +1,14 @@
 package pe.trazos.wicket;
 
 import org.junit.Test;
-import pe.trazos.homepage.HomePageAnonimo;
+import pe.trazos.homepage.HomePage;
 
 public class TestHomePageAnonimo extends AbstractHorasTest {
 
 	@Test
 	public void rendersSuccessfully() {
-		tester.startPage(HomePageAnonimo.class);
-		tester.assertRenderedPage(HomePageAnonimo.class);
+		tester.startPage(HomePage.class);
+		tester.assertRenderedPage(HomePage.class);
 	}
 
 }
