@@ -1,36 +1,69 @@
 package pe.trazos.homepage;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.image.ContextImage;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pe.trazos.dominio.Participacion;
+import pe.trazos.componentes.WebPageBase;
+import pe.trazos.dao.HibernateUtil;
 import pe.trazos.dominio.Partido;
+import pe.trazos.dominio.Posicionable;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class PanelFecha extends Panel {
 
-	protected static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-	private static final Logger log = LoggerFactory.getLogger(HomePage.class);
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	private static final Logger log = LoggerFactory.getLogger(PanelFecha.class);
 
 	private ModeloFecha fecha;
+	private HomePage homePage;
+	private ArrayList<Posicionable> participantes;
 	private Form partidoForm;
 	private RepeatingView partidoRepetidor;
 
-	public PanelFecha(String unId, ModeloFecha unaFecha) {
+	public PanelFecha(String unId, ModeloFecha unaFecha, HomePage unaVentana) {
 		super(unId);
 		fecha = unaFecha;
+		homePage = unaVentana;
+		participantes = new ArrayList<>();
 		agregarFecha();
 		agregarPartidos();
+		agregarEnlaces();
+	}
+
+	public void addParticipante(Posicionable unPosicionable) {
+		participantes.add(unPosicionable);
+	}
+
+	private void agregarEnlaces() {
+		AjaxSubmitLink linkAnterior = new AjaxSubmitLink("boton-anterior", partidoForm) {
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form form) {
+				log.info("fecha anterior");
+				grabar();
+				homePage.actualizar(target);
+			}
+		};
+		add(linkAnterior);
+		AjaxSubmitLink linkSiguiente = new AjaxSubmitLink("boton-siguiente", partidoForm) {
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form form) {
+				log.info("fecha siguiente");
+				grabar();
+				homePage.actualizar(target);
+			}
+		};
+		add(linkSiguiente);
 	}
 
 	private void agregarFecha() {
@@ -48,23 +81,19 @@ public class PanelFecha extends Panel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				log.info("save.onsubmit");
+				grabar();
+				homePage.actualizar(target);
 			}
 		};
-		add(link);
+		partidoForm.add(link);
 	}
 
 	private void agregarPartidos() {
+		participantes = new ArrayList<>();
 		for (Partido p : fecha.getObject().getPartidos()) {
-			log.info("partido: " + p);
+			log.debug("partido: " + p);
 			crearUnPartido(p, partidoRepetidor);
 		}
-	}
-
-	protected void agregarUnEquipo(String unId, Partido unPartido, Participacion unaPartic, WebMarkupContainer unContainer) {
-		Fragment fragCelda = new Fragment("equipo" + unId, "equipo" + unId, this);
-		fragCelda.add(new ContextImage("imagen", unaPartic.getEquipo().getLogo()));
-		fragCelda.add(new Label("equipo", unaPartic.getEquipo().getNombre()));
-		unContainer.add(fragCelda);
 	}
 
 	private void crearPartidos() {
@@ -82,10 +111,31 @@ public class PanelFecha extends Panel {
 		WebMarkupContainer partidoExterior = new WebMarkupContainer(unRepetidor.newChildId());
 		partidoExterior.setOutputMarkupId(true);
 		unRepetidor.add(partidoExterior);
-		PartidoComponentPanel p = new PartidoComponentPanel("item-partido", unPartido);
+		// componente de formulario
+		PartidoComponentPanel p = new PartidoComponentPanel("item-partido", new Model<>(unPartido), this);
 		p.setOutputMarkupId(true);
 		partidoExterior.add(p);
 		unRepetidor.add(partidoExterior);
+	}
+
+	private Component getParentWindow(Component unComponente) {
+		log.debug(unComponente.getClass().getName() + " " + unComponente.toString());
+		if (unComponente.getParent() == null) {
+			return unComponente;
+		} else if (unComponente.getParent() instanceof WebPageBase) {
+			return unComponente.getParent();
+		} else {
+			return getParentWindow(unComponente.getParent());
+		}
+	}
+
+	private void grabar() {
+		log.info("grabar");
+		for (Posicionable p : participantes) {
+			log.info("grabando " + p.toString());
+			HibernateUtil.getSessionFactory().getCurrentSession().saveOrUpdate(p);
+		}
+
 	}
 
 }

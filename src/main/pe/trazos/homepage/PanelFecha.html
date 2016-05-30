@@ -11,63 +11,15 @@
                 <div class="repetidor" wicket:id="repeater">
                     <div wicket:id="item-partido"></div>
                 </div>
+                <a wicket:id="boton-actualizar">actualizar</a>
             </form>
-            <a wicket:id="boton-actualizar">actualizar</a>
         </div>
+    </div>
+    <div class="col-md-2">
+        <a wicket:id="boton-anterior">anterior fecha</a>
+    </div>
+    <div class="col-md-2">
+        <a wicket:id="boton-siguiente">siguiente fecha</a>
     </div>
 </wicket:panel>
-<!-- fragmentos -->
-<wicket:fragment wicket:id="partido">
-    <div class="row fecha">
-        <div class="col-md-3" wicket:id="fecha"></div>
-    </div>
-    <div class="row" wicket:id="filaPartido">
-        <div class="col-md-4 equipo local" wicket:id="equipoLocal"></div>
-        <div class="col-md-1 equipo centro">vs.</div>
-        <div class="col-md-4 equipo visita" wicket:id="equipoVisitante"></div>
-    </div>
-</wicket:fragment>
-<wicket:fragment wicket:id="equipoLocal">
-    <img wicket:id="imagen"/>
-    <span wicket:id="equipo"></span>
-</wicket:fragment>
-<wicket:fragment wicket:id="equipoVisitante">
-    <span wicket:id="equipo"></span>
-    <img wicket:id="imagen"/>
-</wicket:fragment>
-<wicket:fragment wicket:id="stats">
-    <div class="col-md-2 stats">
-        <span wicket:id="stats"></span>
-        <br/>
-        (<span wicket:id="cantStats"></span> partidos)
-    </div>
-</wicket:fragment>
-<wicket:fragment wicket:id="goles">
-    <div class="row">
-        <div class="col-md-2 stats local">
-            <span wicket:id="statsLocal"></span>
-            <br/>
-            (<span wicket:id="cantStatsLocal"></span> partidos)
-        </div>
-        <div class="col-md-2 goles local">
-            <input size="3" type="text" wicket:id="golesLocal"/>
-        </div>
-        <div class="col-md-1 centro"><img wicket:id="pelota"/></div>
-        <div class="col-md-2 goles visita">
-            <input size="3" type="text" wicket:id="golesVisita"/>
-        </div>
-        <div class="col-md-2 stats visitante">
-            <span wicket:id="statsVisitante"></span>
-            <br/>
-            (<span wicket:id="cantStatsVisitante"></span> partidos)
-        </div>
-    </div>
-</wicket:fragment>
-<wicket:fragment wicket:id="boton-actualizar">
-    <div class="row">
-        <div class="col-md-9 boton">
-            <input type="button" wicket:id="save" value="actualizar tabla"/>
-        </div>
-    </div>
-</wicket:fragment>
 </html>

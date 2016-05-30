@@ -52,16 +52,18 @@ public class Competencia implements Serializable {
 		log.debug("crear posiciones");
 		resetPosiciones();
 		for (Fecha fec : fechas) {
-			log.debug("fecha {}", fec);
+			log.debug("{}", fec);
 			for (Partido partido : fec.getPartidos()) {
-				log.trace("partido {}", partido);
+				log.trace("{}", partido);
 				Map<Boolean, Participacion> participantes = partido.getParticipantes();
 				// buscar los pronosticos y armar el mapa de pronosticos
 				Map<Boolean, Pronostico> pronosticoPartido = obtenerPronosticos(participantes);
 				// calcular las posiciones para los 2 participantes
 				if (pronosticoPartido != null) {
+					log.debug("usando pronóstico");
 					crearUnaPosicion(pronosticoPartido);
 				} else {
+					log.debug("usando participantes");
 					crearUnaPosicion(participantes);
 				}
 			}
@@ -74,9 +76,9 @@ public class Competencia implements Serializable {
 		log.debug("crear posiciones");
 		resetPosiciones();
 		for (Fecha fec : fechas) {
-			log.debug("fecha {}", fec);
+			log.debug("{}", fec);
 			for (Partido partido : fec.getPartidos()) {
-				log.debug("partido {}", partido);
+				log.debug("{}", partido);
 				Map<Boolean, Participacion> participantes = partido.getParticipantes();
 				// buscar los pronosticos y armar el mapa de pronosticos
 				Map<Boolean, Pronostico> pronosticoPartido = obtenerPronosticos(participantes, pronosticos);

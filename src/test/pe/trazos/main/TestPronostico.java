@@ -26,21 +26,6 @@ public class TestPronostico extends TestBase {
 
 	private final Logger logger = LoggerFactory.getLogger(TestPronostico.class);
 
-	@Test
-	public void crearPronosticos() {
-		DaoVisitante dv = new DaoVisitante();
-		Visitante v = dv.get("10208978070830655");
-		assertNotNull(v);
-		DaoFecha df = new DaoFecha();
-		Fecha f = df.get(307);
-		assertNotNull(f);
-		PronosticoFecha pf = new PronosticoFecha(f, v);
-		assertNotNull(pf);
-		assertTrue(true);
-		Set<Partido> lp = pf.getPartidos();
-		assertThat(lp.size(), is(5));
-	}
-
 	@After
 	public void endTransaction() {
 		sesion.getTransaction().commit();

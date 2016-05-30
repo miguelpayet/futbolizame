@@ -40,12 +40,14 @@ public class Pronostico extends Posicionable implements Serializable {
 		return visitante;
 	}
 
-	public void setParticipacion(Participacion participacion) {
+	public Pronostico setParticipacion(Participacion participacion) {
 		this.participacion = participacion;
+		return this;
 	}
 
-	public void setVisitante(Visitante visitante) {
+	public Pronostico setVisitante(Visitante visitante) {
 		this.visitante = visitante;
+		return this;
 	}
 
 	@Override

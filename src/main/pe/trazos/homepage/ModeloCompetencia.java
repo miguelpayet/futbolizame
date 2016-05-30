@@ -33,9 +33,6 @@ public class ModeloCompetencia extends LoadableDetachableModel<Competencia> {
 			getObject().clearVisitante();
 		}
 		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
-		if (s.isOpen()) {
-			log.info("todo bien");
-		}
 		getObject().crearPosiciones();
 	}
 
@@ -76,7 +73,7 @@ public class ModeloCompetencia extends LoadableDetachableModel<Competencia> {
 
 	@Override
 	protected Competencia load() {
-		log.info("load");
+		log.debug("load");
 		DaoCompetencia dc = new DaoCompetencia();
 		Competencia c = dc.get(idCompetencia);
 		if (c == null) {

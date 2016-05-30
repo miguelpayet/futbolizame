@@ -37,6 +37,16 @@ public class HomePage extends WebPageBase {
 		initPagina();
 	}
 
+	public void actualizar(AjaxRequestTarget unTarget) {
+		// tabla de posiciones
+		crearTablaPosiciones();
+		// partidos
+		crearFecha();
+		// elementos a refrescar
+		unTarget.add(tablaExterior);
+		unTarget.add(fechaExterior);
+	}
+
 	protected void agregarIntro() throws RuntimeException {
 		add(new Label("intro", competencia.getNombreCompetencia()));
 	}
@@ -57,12 +67,11 @@ public class HomePage extends WebPageBase {
 		tablaExterior.add(tablaPanel);
 	}
 
-
 	private void agregarUnaEstadistica(String unId, Partido unPartido, Participacion unaParticipacion, Fragment unContainer) {
 	}
 
 	private void crearFecha() {
-		Component nuevoPanel = new PanelFecha("panel-fecha", fecha);
+		Component nuevoPanel = new PanelFecha("panel-fecha", fecha, this);
 		fechaPanel.replaceWith(nuevoPanel);
 		fechaPanel = nuevoPanel;
 	}
@@ -77,13 +86,7 @@ public class HomePage extends WebPageBase {
 	protected void doLogin(String unUsuario, String unToken, AjaxRequestTarget unTarget) {
 		if (!getSesion().isSignedIn()) {
 			if (getSesion().signIn(unUsuario, unToken)) {
-				// tabla de posiciones
-				crearTablaPosiciones();
-				// partidos
-				crearFecha();
-				// elementos a refrescar
-				unTarget.add(tablaExterior);
-				unTarget.add(fechaExterior);
+				actualizar(unTarget);
 			}
 		}
 	}
@@ -91,14 +94,7 @@ public class HomePage extends WebPageBase {
 	@Override
 	protected void doLogout(AjaxRequestTarget unTarget) {
 		getSesion().signOut();
-		// tabla de posiciones
-		crearTablaPosiciones();
-		// partidos
-		crearFecha();
-		// elementos a refrescar
-		unTarget.add(tablaExterior);
-		unTarget.add(fechaExterior);
-
+		actualizar(unTarget);
 	}
 
 	protected void formSubmit() {
