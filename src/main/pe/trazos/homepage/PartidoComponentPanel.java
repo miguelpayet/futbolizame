@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import pe.trazos.auth.SesionFacebook;
+import pe.trazos.auth.SesionWeb;
 import pe.trazos.dao.DaoPronostico;
 import pe.trazos.dominio.*;
 
@@ -26,20 +26,23 @@ public class PartidoComponentPanel extends FormComponentPanel {
 	}
 
 	private void agregarLocal() {
-		add(new ContextImage("imagen-local", partido.getLocal().getEquipo().getLogo()));
-		add(new Label("nombre-local", new Model<>(partido.getLocal().getEquipo().getNombre())));
+		agregarPosicionable(partido.getLocal(), "local");
+	}
+
+	private void agregarPosicionable(Participacion unaParticipacion, String unSufijo) {
+		add(new ContextImage("imagen-" + unSufijo, unaParticipacion.getEquipo().getLogo()));
+		add(new Label("nombre-" + unSufijo, new Model<>(unaParticipacion.getEquipo().getNombre())));
 		Posicionable p;
-		if (SesionFacebook.get().isSignedIn()) {
-			DaoPronostico dp = new DaoPronostico();
-			PronosticoPK pk = new PronosticoPK();
-			pk.setVisitante(SesionFacebook.get().getVisitante());
-			pk.setParticipacion(partido.getLocal());
-			p = dp.get(pk);
-			panelFecha.addParticipante(p);
-		} else {
-			p = partido.getLocal();
+		DaoPronostico dp = new DaoPronostico();
+		PronosticoPK pk = new PronosticoPK();
+		pk.setVisitante(SesionWeb.get().getVisitante());
+		pk.setParticipacion(unaParticipacion);
+		p = dp.get(pk);
+		if (p == null) {
+			p = new Pronostico().setParticipacion(unaParticipacion).setVisitante(SesionWeb.get().getVisitante());
 		}
-		add(new TextField<String>("goles-local", new PropertyModel<>(p, "goles")));
+		panelFecha.addParticipante(p);
+		add(new TextField<String>("goles-" + unSufijo, new PropertyModel<>(p, "goles")));
 	}
 
 	private void agregarTitulo() {
@@ -47,43 +50,7 @@ public class PartidoComponentPanel extends FormComponentPanel {
 	}
 
 	private void agregarVisita() {
-		add(new ContextImage("imagen-visita", partido.getVisita().getEquipo().getLogo()));
-		add(new Label("nombre-visita", new Model<>(partido.getVisita().getEquipo().getNombre())));
-		Posicionable p;
-		if (SesionFacebook.get().isSignedIn()) {
-			DaoPronostico dp = new DaoPronostico();
-			PronosticoPK pk = new PronosticoPK();
-			pk.setVisitante(SesionFacebook.get().getVisitante());
-			pk.setParticipacion(partido.getVisita());
-			p = dp.get(pk);
-			if (p == null) {
-				p = new Pronostico().setParticipacion(partido.getVisita()).setVisitante(SesionFacebook.get().getVisitante());
-			}
-			panelFecha.addParticipante(p);
-		} else {
-			p = partido.getVisita();
-		}
-		add(new TextField<String>("goles-visita", new PropertyModel<>(p, "goles")));
-	}
-
-	private void agregarPosicionable(Participacion unaParticipacion, String unSufijo) {
-		add(new ContextImage("imagen-visita", partido.getVisita().getEquipo().getLogo()));
-		add(new Label("nombre-visita", new Model<>(partido.getVisita().getEquipo().getNombre())));
-		Posicionable p;
-		if (SesionFacebook.get().isSignedIn()) {
-			DaoPronostico dp = new DaoPronostico();
-			PronosticoPK pk = new PronosticoPK();
-			pk.setVisitante(SesionFacebook.get().getVisitante());
-			pk.setParticipacion(partido.getVisita());
-			p = dp.get(pk);
-			if (p == null) {
-				p = new Pronostico().setParticipacion(partido.getVisita()).setVisitante(SesionFacebook.get().getVisitante());
-			}
-			panelFecha.addParticipante(p);
-		} else {
-			p = partido.getVisita();
-		}
-		add(new TextField<String>("goles-visita", new PropertyModel<>(p, "goles")));
+		agregarPosicionable(partido.getVisita(), "visita");
 	}
 
 }

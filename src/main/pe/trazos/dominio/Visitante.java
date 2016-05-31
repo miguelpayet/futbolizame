@@ -1,5 +1,7 @@
 package pe.trazos.dominio;
 
+import pe.trazos.auth.TipoSesion;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -13,6 +15,9 @@ public class Visitante implements Serializable {
 	Date fecha;
 	@Column(name = "nombre")
 	String nombre;
+	@Column(name = "tipo")
+	@Enumerated(EnumType.ORDINAL)
+	TipoSesion tipo;
 	@Column(name = "token")
 	String token;
 	@Id

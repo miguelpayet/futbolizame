@@ -1,6 +1,7 @@
 package pe.trazos.homepage;
 
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.slf4j.LoggerFactory;
 import pe.trazos.dao.DaoFecha;
 import pe.trazos.dominio.Fecha;

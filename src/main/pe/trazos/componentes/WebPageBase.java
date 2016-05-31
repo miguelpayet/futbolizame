@@ -15,7 +15,7 @@ import org.wicketstuff.facebook.behaviors.AuthLoginEventBehavior;
 import org.wicketstuff.facebook.behaviors.LogoutEventBehavior;
 import org.wicketstuff.facebook.plugins.LikeButton;
 import org.wicketstuff.facebook.plugins.LoginButton;
-import pe.trazos.auth.SesionFacebook;
+import pe.trazos.auth.SesionWeb;
 import pe.trazos.homepage.LoginStatusEventBehavior;
 import pe.trazos.web.FutbolizameApplication;
 
@@ -92,8 +92,8 @@ public abstract class WebPageBase extends GenericWebPage {
 		add(feedback);
 	}
 
-	protected SesionFacebook getSesion() {
-		return SesionFacebook.get();
+	protected SesionWeb getSesion() {
+		return SesionWeb.get();
 	}
 
 }

@@ -1,11 +1,9 @@
 package pe.trazos.homepage;
 
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.hibernate.Session;
 import org.slf4j.LoggerFactory;
-import pe.trazos.auth.SesionFacebook;
+import pe.trazos.auth.SesionWeb;
 import pe.trazos.dao.DaoCompetencia;
-import pe.trazos.dao.HibernateUtil;
 import pe.trazos.dominio.Competencia;
 import pe.trazos.dominio.Posicion;
 import pe.trazos.dominio.Posicionable;
@@ -27,12 +25,7 @@ public class ModeloCompetencia extends LoadableDetachableModel<Competencia> {
 	}
 
 	public void crearPosiciones() {
-		if (SesionFacebook.get().isSignedIn()) {
-			getObject().setVisitante(SesionFacebook.get().getVisitante());
-		} else {
-			getObject().clearVisitante();
-		}
-		Session s = HibernateUtil.getSessionFactory().getCurrentSession();
+		getObject().setVisitante(SesionWeb.get().getVisitante());
 		getObject().crearPosiciones();
 	}
 
@@ -53,13 +46,7 @@ public class ModeloCompetencia extends LoadableDetachableModel<Competencia> {
 	}
 
 	public String getTituloTabla() {
-		String titulo = "tabla de posiciones ";
-		if (SesionFacebook.get().isSignedIn()) {
-			titulo += "(" + SesionFacebook.get().getUserName() + ")";
-		} else {
-			titulo += " (anónimo)";
-		}
-		return titulo;
+		return "tabla de posiciones (" + SesionWeb.get().getUserName() + ")";
 	}
 
 	private void init() {

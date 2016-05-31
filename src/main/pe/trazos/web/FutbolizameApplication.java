@@ -4,16 +4,16 @@ import de.agilecoders.wicket.core.Bootstrap;
 import org.apache.wicket.Application;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pe.trazos.auth.SesionFacebook;
+import pe.trazos.auth.SesionWeb;
 import pe.trazos.homepage.HomePage;
 
-public class FutbolizameApplication extends AuthenticatedWebApplication {
+public class FutbolizameApplication extends WebApplication {
 
 	public static FutbolizameApplication get() {
 		return (FutbolizameApplication) Application.get();
@@ -30,16 +30,6 @@ public class FutbolizameApplication extends AuthenticatedWebApplication {
 	}
 
 	@Override
-	protected Class<? extends WebPage> getSignInPageClass() {
-		return null;
-	}
-
-	@Override
-	protected Class<SesionFacebook> getWebSessionClass() {
-		return SesionFacebook.class;
-	}
-
-	@Override
 	@SuppressWarnings("deprecation")
 	public void init() {
 		super.init();
@@ -51,7 +41,7 @@ public class FutbolizameApplication extends AuthenticatedWebApplication {
 
 	@Override
 	public Session newSession(final Request request, final Response response) {
-		return new SesionFacebook(request);
+		return new SesionWeb(request);
 	}
 
 }

@@ -84,8 +84,9 @@ public class HomePage extends WebPageBase {
 
 	@Override
 	protected void doLogin(String unUsuario, String unToken, AjaxRequestTarget unTarget) {
-		if (!getSesion().isSignedIn()) {
-			if (getSesion().signIn(unUsuario, unToken)) {
+		// si ya tiene facebook login, no hacer nada
+		if (!getSesion().isLoginFacebook()) {
+			if (getSesion().loginFacebook(unUsuario, unToken)) {
 				actualizar(unTarget);
 			}
 		}
@@ -93,7 +94,10 @@ public class HomePage extends WebPageBase {
 
 	@Override
 	protected void doLogout(AjaxRequestTarget unTarget) {
-		getSesion().signOut();
+		// logout tipo facebook
+		getSesion().logoutFacebook();
+		// volver a sesion anonima
+		getSesion().loginAnonimo();
 		actualizar(unTarget);
 	}
 
