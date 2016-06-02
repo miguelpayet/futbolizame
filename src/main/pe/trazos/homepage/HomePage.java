@@ -2,6 +2,7 @@ package pe.trazos.homepage;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -9,6 +10,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pe.trazos.componentes.WebPageBase;
+import pe.trazos.dominio.Fecha;
 import pe.trazos.dominio.Participacion;
 import pe.trazos.dominio.Partido;
 
@@ -45,6 +47,33 @@ public class HomePage extends WebPageBase {
 		// elementos a refrescar
 		unTarget.add(tablaExterior);
 		unTarget.add(fechaExterior);
+	}
+
+	private void agregarEnlacesFecha() {
+		AjaxLink linkAnterior = new AjaxLink("boton-anterior") {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				log.info("fecha anterior");
+				Fecha fechaAnterior = competencia.getObject().getFechaAnterior(fecha.getObject());
+				if (fechaAnterior != null) {
+					reemplazarFecha(fechaAnterior);
+					target.add(fechaExterior);
+				}
+			}
+		};
+		fechaExterior.add(linkAnterior);
+		AjaxLink linkSiguiente = new AjaxLink("boton-siguiente") {
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				log.info("fecha siguiente");
+				Fecha fechaSiguiente = competencia.getObject().getFechaSiguiente(fecha.getObject());
+				if (fechaSiguiente != null) {
+					reemplazarFecha(fechaSiguiente);
+					target.add(fechaExterior);
+				}
+			}
+		};
+		fechaExterior.add(linkSiguiente);
 	}
 
 	protected void agregarIntro() throws RuntimeException {
@@ -85,6 +114,7 @@ public class HomePage extends WebPageBase {
 	@Override
 	protected void doLogin(String unUsuario, String unToken, AjaxRequestTarget unTarget) {
 		// si ya tiene facebook login, no hacer nada
+		log.debug("doLogin");
 		if (!getSesion().isLoginFacebook()) {
 			if (getSesion().loginFacebook(unUsuario, unToken)) {
 				actualizar(unTarget);
@@ -94,6 +124,7 @@ public class HomePage extends WebPageBase {
 
 	@Override
 	protected void doLogout(AjaxRequestTarget unTarget) {
+		log.debug("doLogout");
 		// logout tipo facebook
 		getSesion().logoutFacebook();
 		// volver a sesion anonima
@@ -102,7 +133,7 @@ public class HomePage extends WebPageBase {
 	}
 
 	protected void formSubmit() {
-		log.info("formSubmit");
+		log.debug("formSubmit");
 	}
 
 	private void init() {
@@ -114,10 +145,16 @@ public class HomePage extends WebPageBase {
 		agregarIntro();
 		agregarPanelTabla();
 		agregarPanelFecha();
+		agregarEnlacesFecha();
 		// hack para forzar a wicket a descartar el objeto interno del modelo y volverlo a leer en las llamadas ajax
 		// http://apache-wicket.1842946.n4.nabble.com/Ajax-and-LoadableDetachableModel-td1885858.html
 		// la otra opción es usar eager fetching
 		competencia.detach();
+	}
+
+	private void reemplazarFecha(Fecha unaFecha) {
+		fecha = new ModeloFecha(unaFecha);
+		crearFecha();
 	}
 
 }

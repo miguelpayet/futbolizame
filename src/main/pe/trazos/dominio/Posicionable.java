@@ -59,7 +59,7 @@ public abstract class Posicionable implements Serializable {
 	protected abstract Equipo getEquipo();
 
 	public Integer getGoles() {
-		log.debug("goles es: {}", goles);
+		log.trace("goles es: {}", goles);
 		return goles;
 	}
 

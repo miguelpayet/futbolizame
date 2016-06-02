@@ -37,6 +37,7 @@ public class FutbolizameApplication extends WebApplication {
 		if (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
 			getDebugSettings().setOutputComponentPath(true);
 		}
+		getRequestCycleListeners().add(new HibernateRequestListener());
 	}
 
 	@Override

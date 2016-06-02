@@ -38,32 +38,10 @@ public class PanelFecha extends Panel {
 		participantes = new ArrayList<>();
 		agregarFecha();
 		agregarPartidos();
-		agregarEnlaces();
 	}
 
 	public void addParticipante(Posicionable unPosicionable) {
 		participantes.add(unPosicionable);
-	}
-
-	private void agregarEnlaces() {
-		AjaxSubmitLink linkAnterior = new AjaxSubmitLink("boton-anterior", partidoForm) {
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form form) {
-				log.info("fecha anterior");
-				grabar();
-				homePage.actualizar(target);
-			}
-		};
-		add(linkAnterior);
-		AjaxSubmitLink linkSiguiente = new AjaxSubmitLink("boton-siguiente", partidoForm) {
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form form) {
-				log.info("fecha siguiente");
-				grabar();
-				homePage.actualizar(target);
-			}
-		};
-		add(linkSiguiente);
 	}
 
 	private void agregarFecha() {

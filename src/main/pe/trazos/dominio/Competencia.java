@@ -60,32 +60,10 @@ public class Competencia implements Serializable {
 				Map<Boolean, Pronostico> pronosticoPartido = obtenerPronosticos(participantes);
 				// calcular las posiciones para los 2 participantes
 				if (pronosticoPartido != null) {
-					log.debug("usando pronóstico");
+					log.trace("usando pronóstico");
 					crearUnaPosicion(pronosticoPartido);
 				} else {
-					log.debug("usando participantes");
-					crearUnaPosicion(participantes);
-				}
-			}
-		}
-		log.debug("posiciones: " + posiciones.size());
-	}
-
-	@Deprecated
-	public void crearPosiciones(Map<Participacion, Pronostico> pronosticos) {
-		log.debug("crear posiciones");
-		resetPosiciones();
-		for (Fecha fec : fechas) {
-			log.debug("{}", fec);
-			for (Partido partido : fec.getPartidos()) {
-				log.debug("{}", partido);
-				Map<Boolean, Participacion> participantes = partido.getParticipantes();
-				// buscar los pronosticos y armar el mapa de pronosticos
-				Map<Boolean, Pronostico> pronosticoPartido = obtenerPronosticos(participantes, pronosticos);
-				// calcular las posiciones para los 2 participantes
-				if (pronosticoPartido != null) {
-					crearUnaPosicion(pronosticoPartido);
-				} else {
+					log.trace("usando participantes");
 					crearUnaPosicion(participantes);
 				}
 			}
@@ -96,7 +74,7 @@ public class Competencia implements Serializable {
 	private void crearUnaPosicion(Map<Boolean, ? extends Posicionable> unosParticipantes) {
 		// quiero que se asimile en la posicion cada uno de los pronosticos o participaciones
 		// en la participacion está relacionado a través del partido, pero en el pronóstico no y por eso vienen en pares
-		log.debug("crear una posición");
+		log.trace("crear una posición");
 		for (Map.Entry<Boolean, ? extends Posicionable> partEntry : unosParticipantes.entrySet()) {
 			Posicionable participante = partEntry.getValue();
 			Posicion posicion = obtenerPosicion(participante);
@@ -107,6 +85,28 @@ public class Competencia implements Serializable {
 
 	public Date getActualizado() {
 		return actualizado;
+	}
+
+	public Fecha getFechaAnterior(Fecha unaFecha) {
+		Fecha fechaMenor = null;
+		for (Fecha f : getFechas()) {
+			if (f.getFecha().before(unaFecha.getFecha())) {
+				log.debug("fecha anterior {}", f);
+				// la mayor fecha de la colección que sea menor a la que pidieron
+				fechaMenor = f;
+			}
+		}
+		return fechaMenor;
+	}
+
+	public Fecha getFechaSiguiente(Fecha unaFecha) {
+		for (Fecha f : getFechas()) {
+			log.debug("fecha siguiente {}", f);
+			if (f.getFecha().after(unaFecha.getFecha())) {
+				return f;
+			}
+		}
+		return null;
 	}
 
 	public Fecha getFechaSiguiente(Date unaFecha) {
