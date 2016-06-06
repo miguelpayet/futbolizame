@@ -1,9 +1,12 @@
 package pe.trazos.dominio;
 
+import org.hibernate.annotations.SortComparator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+import java.util.SortedSet;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -24,7 +27,8 @@ public class Fecha implements Serializable, Comparable<Fecha> {
 	@Column(name = "numero")
 	private Integer numero;
 	@OneToMany(mappedBy = "fecha", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Partido> partidos;
+	@SortComparator(ComparadorPartido.class)
+	private SortedSet<Partido> partidos;
 
 	public Fecha() {
 	}

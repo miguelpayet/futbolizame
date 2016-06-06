@@ -71,7 +71,7 @@ public abstract class Posicionable implements Serializable {
 		return golesFavor;
 	}
 
-	protected abstract Partido getPartido();
+	public abstract Partido getPartido();
 
 	public Integer getPartidoEmpatado() {
 		return partidoEmpatado;

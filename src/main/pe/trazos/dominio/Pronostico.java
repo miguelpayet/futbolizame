@@ -32,7 +32,7 @@ public class Pronostico extends Posicionable implements Serializable {
 	}
 
 	@Override
-	protected Partido getPartido() {
+	public Partido getPartido() {
 		return getParticipacion().getPartido();
 	}
 

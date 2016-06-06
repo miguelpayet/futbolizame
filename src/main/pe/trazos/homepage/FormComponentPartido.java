@@ -11,12 +11,12 @@ import pe.trazos.auth.SesionWeb;
 import pe.trazos.dao.DaoPronostico;
 import pe.trazos.dominio.*;
 
-public class PartidoComponentPanel extends FormComponentPanel {
+public class FormComponentPartido extends FormComponentPanel {
 
 	private PanelFecha panelFecha;
 	private Partido partido;
 
-	public PartidoComponentPanel(String id, IModel<Partido> unPartido, PanelFecha unPanel) {
+	public FormComponentPartido(String id, IModel<Partido> unPartido, PanelFecha unPanel) {
 		super(id, unPartido);
 		partido = unPartido.getObject();
 		panelFecha = unPanel;
@@ -32,12 +32,11 @@ public class PartidoComponentPanel extends FormComponentPanel {
 	private void agregarPosicionable(Participacion unaParticipacion, String unSufijo) {
 		add(new ContextImage("imagen-" + unSufijo, unaParticipacion.getEquipo().getLogo()));
 		add(new Label("nombre-" + unSufijo, new Model<>(unaParticipacion.getEquipo().getNombre())));
-		Posicionable p;
 		DaoPronostico dp = new DaoPronostico();
 		PronosticoPK pk = new PronosticoPK();
 		pk.setVisitante(SesionWeb.get().getVisitante());
 		pk.setParticipacion(unaParticipacion);
-		p = dp.get(pk);
+		Posicionable p = dp.get(pk);
 		if (p == null) {
 			p = new Pronostico().setParticipacion(unaParticipacion).setVisitante(SesionWeb.get().getVisitante());
 		}
@@ -46,7 +45,7 @@ public class PartidoComponentPanel extends FormComponentPanel {
 	}
 
 	private void agregarTitulo() {
-		add(new Label("fecha", new Model<>(partido.getFecha().getFecha())));
+		add(new Label("fecha", new Model<>(partido.getFechaPartido())));
 	}
 
 	private void agregarVisita() {

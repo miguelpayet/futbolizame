@@ -19,6 +19,7 @@ import pe.trazos.dominio.Posicionable;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PanelFecha extends Panel {
 
@@ -90,7 +91,12 @@ public class PanelFecha extends Panel {
 		partidoExterior.setOutputMarkupId(true);
 		unRepetidor.add(partidoExterior);
 		// componente de formulario
-		PartidoComponentPanel p = new PartidoComponentPanel("item-partido", new Model<>(unPartido), this);
+		WebMarkupContainer p;
+		if (unPartido.getFechaPartido().before(new Date())) {
+			p = new PanelPartido("item-partido", new Model<>(unPartido));
+		} else {
+			p = new FormComponentPartido("item-partido", new Model<>(unPartido), this);
+		}
 		p.setOutputMarkupId(true);
 		partidoExterior.add(p);
 		unRepetidor.add(partidoExterior);
@@ -109,10 +115,11 @@ public class PanelFecha extends Panel {
 
 	private void grabar() {
 		log.info("grabar");
-		for (Posicionable p : participantes) {
+		final Date ahora = new Date();
+		participantes.stream().filter(p -> ahora.before(p.getPartido().getFechaPartido())).forEach(p -> {
 			log.info("grabando " + p.toString());
 			HibernateUtil.getSessionFactory().getCurrentSession().saveOrUpdate(p);
-		}
+		});
 
 	}
 

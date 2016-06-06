@@ -118,7 +118,7 @@ public class Partido implements Serializable {
 	}
 
 	public String toString() {
-		return String.format("%s vs %s (%s)", getLocal().getEquipo().getNombre(), getVisita().getEquipo().getNombre(), getFecha().getFecha());
+		return String.format("%s vs %s (%s)", getLocal().getEquipo().getNombre(), getVisita().getEquipo().getNombre(), getFechaPartido());
 	}
 
 }

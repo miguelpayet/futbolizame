@@ -6,21 +6,40 @@
     <link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet"/>
 </head>
 <body>
-<div id="fb-root" wicket:id="fb-root"></div>
-<div class="row">
-    <div class="col-md-12">
-        <p>
-            <wicket:container wicket:id="intro">título</wicket:container>
-        </p>
+<div class="container">
+    <div id="fb-root" wicket:id="fb-root"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="cabecera-pagina">
+                <img src="images/logo-pagina.jpg"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <wicket:container wicket:id="intro">título</wicket:container>
+            </p>
+        </div>
+    </div>
+    <wicket:child/>
+    <div class="row">
+        <div class="facebook">
+            <div class="col-md-6">
+                <div wicket:id="loginButton"></div>
+            </div>
+            <div class="col-md-6">
+                <div wicket:id="likeButton" data-colorscheme="dark">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="pie">&nbsp;</div>
+        </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
-        <div wicket:id="loginButton"></div>
-    </div>
-</div>
-<div wicket:id="likeButton" data-colorscheme="dark"></div>
-<wicket:child/>
 <script src="ga.min.js" type="text/javascript"/>
 </body>
 </html>

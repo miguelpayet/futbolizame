@@ -1,71 +1,3 @@
-#bd {
--moz-border-radius:10px;
--moz-box-shadow:0 0 10px #888;
--webkit-border-radius:10px;
--webkit-box-shadow:0 0 10px #888;
-background-color:#fff;
-border-radius:10px;
-bottom:75px;
-box-shadow:0 0 10px #888;
-left:50%;
-margin-left:-325px;
-overflow:auto;
-position:absolute;
-top:75px;
-z-index:1;
-}
-
-#hd {
-background-color:#092E67;
-border-bottom:1px solid #888;
-height:87px;
-margin-top:0;
-padding-top:10px;
-width:100%;
-z-index:0;
-}
-
-#logo h1 {
-color:#FFF;
-display:inline;
-font-size:36pt;
-}
-
-#logo img {
-display:inline;
-margin-left:50px;
-margin-right:5px;
-vertical-align:bottom;
-}
-
-#logo,#bd {
-margin:0 auto;
-padding:25px 50px 0;
-width:650px;
-}
-
-#logo,#logo h1 {
-margin-top:0;
-padding-top:0;
-}
-
-.login-form {
-display:table;
-}
-
-.login-form-cell {
-display:table-cell;
-}
-
-.login-form-row {
-display:table-row;
-}
-
-.partidos .boton {
-padding:.5em 0;
-text-align:center;
-}
-
 .partidos .centro {
 padding-bottom:.25em;
 padding-top:.25em;
@@ -102,57 +34,26 @@ padding:.25em 0;
 text-align:left;
 }
 
-.partidos div.stats.local {
-font-size:10px;
-text-align:left;
-}
-
-.partidos div.stats.visitante {
-font-size:10px;
-text-align:right;
-}
-
 .tabla td.goles {
-border:solid 0 #ddd;
-border-right-width:1px;
-padding-bottom:3px;
-padding-right:.2em;
-padding-top:3px;
 text-align:right;
 width:3em;
 }
 
 .tabla td.goles-diferencia {
-padding-bottom:3px;
-padding-right:.2em;
-padding-top:3px;
 text-align:right;
 width:3em;
 }
 
 .tabla td.nombre {
-border:solid 0 #ddd;
-border-right-width:1px;
-padding:3px .2em;
 width:10em;
 }
 
 .tabla td.partidos {
-border:solid 0 #ddd;
-border-right-width:1px;
-padding-bottom:3px;
-padding-right:.2em;
-padding-top:3px;
 text-align:right;
 width:3em;
 }
 
 .tabla td.puntos {
-border:solid 0 #ddd;
-border-right-width:1px;
-padding-bottom:3px;
-padding-right:.2em;
-padding-top:3px;
 text-align:right;
 width:4em;
 }
@@ -167,35 +68,42 @@ a,a:visited,a:hover,a:active {
 color:#6493D2;
 }
 
-body {
-margin:0;
-padding:0;
+.tabla th {
+  text-align:center;
+  padding: 0.25em;
 }
 
-body,p,li,a {
-font-family:georgia, times, serif;
-font-size:13pt;
+.tabla td {
+    padding: 0.25em;
+border: 1px dotted #ddd;
 }
 
-h1,h2,h3 {
-font-family:helvetica, arial, serif;
+.tabla tr {
+border-bottom: 1px dotted #ddd;
+line-height: 1.5em;
 }
 
-h2 {
-color:#F50;
-font-size:36pt;
-margin:0;
-padding:0;
+.tabla .fila-1, .tabla .fila-2, .tabla .fila-3, .tabla .fila-4 {
+  background-color: #bbffbb;
 }
 
-h3 {
-color:#092E67;
-font-size:24pt;
-margin:0;
-padding:0;
+.tabla .fila-5 {
+  background-color: #ffffbb
 }
 
-td.apellidos {
-border:1px solid #ddd;
-width:10em;
+.tabla .fila-6, .tabla .fila-7, .tabla .fila-8, .tabla .fila-9, .tabla .fila-10 {
+  background-color: #ffbbbb
 }
+
+.pie {
+  margin: 10px 0;
+  height: 50px;
+  background-image: url(images/pie-pagina.jpg);
+  background-repeat: repeat-x;
+}
+
+.cabecera-pagina {
+  height: 81px;
+  margin-bottom: 10px;
+  background-image: url(images/cabecera-pagina.jpg);
+  background-repeat: repeat-x;}

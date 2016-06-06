@@ -1,10 +1,15 @@
 package pe.trazos.homepage;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.DataGridView;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import pe.trazos.dao.ProviderPosicion;
 import pe.trazos.dominio.Posicion;
@@ -13,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PanelTablaPosiciones extends Panel {
+
+	private static final Logger log = LogManager.getLogger(PanelTablaPosiciones.class);
 
 	private ModeloCompetencia competencia;
 	private WebMarkupContainer tablaExterior;
@@ -28,7 +35,17 @@ public class PanelTablaPosiciones extends Panel {
 	private void agregarGrid() {
 		List<ICellPopulator<Posicion>> columns = crearColumnas();
 		ProviderPosicion provider = new ProviderPosicion(competencia);
-		DataGridView<Posicion> tablaGrid = new DataGridView<>("panel-rows", columns, provider);
+		DataGridView<Posicion> tablaGrid = new DataGridView<Posicion>("panel-rows", columns, provider) {
+			int fila = 0;
+
+			@Override
+			protected Item<Posicion> newRowItem(final String id, final int index, final IModel<Posicion> model) {
+				Item<Posicion> item = new Item<>(id, index, model);
+				log.debug(model.getObject().toString());
+				item.add(new AttributeModifier("class", "fila-" + String.valueOf(++fila)));
+				return item;
+			}
+		};
 		tablaGrid.setOutputMarkupId(true);
 		tablaExterior.add(tablaGrid);
 	}
