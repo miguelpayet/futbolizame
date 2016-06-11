@@ -1,4 +1,17 @@
 <wicket:extend xmlns:wicket="http://www.w3.org/1999/xhtml">
+    <!-- intro -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="intro">
+                <span class="titulo">
+                    <wicket:container wicket:id="intro">título</wicket:container>
+                </span>
+                <span class="descripcion">
+                    pronostica los partidos de las eliminatorias sudamericanas y mira como queda la tabla de posiciones con tus pronósticos.
+                </span>
+            </div>
+        </div>
+    </div>
     <!-- tabla -->
     <div class="row">
         <div class="col-md-6" wicket:id="exterior-tabla">
@@ -8,11 +21,17 @@
         <div class="col-md-6" wicket:id="exterior-fecha">
             <span wicket:id="panel-fecha"></span>
             <div class="row">
-                <div class="col-md-6">
-                    <a wicket:id="boton-anterior">anterior fecha</a>
-                </div>
-                <div class="col-md-6">
-                    <a wicket:id="boton-siguiente">siguiente fecha</a>
+                <div class="botones">
+                    <div class="col-md-6 anterior">
+                        <a class="button" wicket:id="boton-anterior">
+                            anterior fecha
+                        </a>
+                    </div>
+                    <div class="col-md-6 siguiente">
+                        <a class="button" wicket:id="boton-siguiente">
+                            siguiente fecha
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

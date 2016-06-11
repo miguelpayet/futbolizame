@@ -35,7 +35,11 @@ public abstract class WebPageBase extends GenericWebPage {
 	private void agregarFacebook() {
 		String facebookid = FutbolizameApplication.get().getInitParameter("facebook-app-id");
 		log.debug("app id {}", facebookid);
-		add(new FacebookSdk("fb-root", facebookid));
+		FacebookSdk fsdk = new FacebookSdk("fb-root", facebookid);
+		fsdk.setOgProperty("url", "http://local.futboliza.me");
+		fsdk.setOgProperty("type", "website");
+		fsdk.setOgProperty("description", "esta es mi descripción");
+		add(fsdk);
 		final IModel<String> url = Model.of("http://futboliza.me"); // todo: no en duro
 		final LikeButton likeButton = new LikeButton("likeButton", url);
 		likeButton.setLayoutStyle(LikeButton.LikeButtonLayoutStyle.BUTTON_COUNT);

@@ -5,6 +5,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.PropertyPopul
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import pe.trazos.componentes.ImagePanel;
 
 class ImagePopulatorCompetencia<T> extends PropertyPopulator<T> {
 

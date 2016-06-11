@@ -1,23 +1,32 @@
 <html xmlns:wicket="http://www.w3.org/1999/xhtml">
 <wicket:panel>
-    <div class="row fecha">
+    <!--div class="row fecha">
         <div class="col-md-3" wicket:id="fecha"></div>
-    </div>
+    </div-->
     <div class="row">
-        <div class="col-md-3 equipo local">
-            <img wicket:id="imagen-local"/>
-            <span wicket:id="nombre-local"></span>
-        </div>
-        <div class="col-md-2 goles local">
-            <input size="3" type="text" wicket:id="goles-local"/>
-        </div>
-        <div class="col-md-2 equipo centro">vs.</div>
-        <div class="col-md-2 goles visita">
-            <input size="3" type="text" wicket:id="goles-visita"/>
-        </div>
-        <div class="col-md-3 equipo visita">
-            <span wicket:id="nombre-visita"></span>
-            <img wicket:id="imagen-visita"/>
+        <div class="partido">
+            <div class="col-md-3">
+                <ul>
+                    <li>hora:<span wicket:id="hora">por definir</span></li>
+                    <li>sitio:<span wicket:id="ubicacion">por definir</span></li>
+                </ul>
+            </div>
+            <div class="col-md-3 equipo local">
+                <img wicket:id="imagen-local"/>
+                <span wicket:id="nombre-local"></span>
+            </div>
+            <div class="col-md-3 goles local">
+                <input size="2" type="text" wicket:id="goles-local"/>
+                <img src="/images/goles.png"/>
+                <!--/div-->
+                <!--div class="col-md-1 equipo centro">vs.</div-->
+                <!--div class="col-md-1 goles visita"-->
+                <input size="2" type="text" wicket:id="goles-visita"/>
+            </div>
+            <div class="col-md-3 equipo visita">
+                <span wicket:id="nombre-visita"></span>
+                <img wicket:id="imagen-visita"/>
+            </div>
         </div>
     </div>
 </wicket:panel>

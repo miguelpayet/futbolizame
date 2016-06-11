@@ -1,4 +1,4 @@
-package pe.trazos.homepage;
+package pe.trazos.componentes;
 
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;

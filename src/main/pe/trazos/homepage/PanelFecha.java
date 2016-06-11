@@ -17,13 +17,11 @@ import pe.trazos.dao.HibernateUtil;
 import pe.trazos.dominio.Partido;
 import pe.trazos.dominio.Posicionable;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class PanelFecha extends Panel {
 
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	private static final Logger log = LoggerFactory.getLogger(PanelFecha.class);
 
 	private ModeloFecha fecha;
@@ -47,7 +45,9 @@ public class PanelFecha extends Panel {
 
 	private void agregarFecha() {
 		// nombre de la fecha
-		add(new Label("nombre-fecha", new PropertyModel(fecha, "nombre")));
+		add(new Label("nombre-fecha", new PropertyModel<String>(fecha, "nombre")));
+		// fecha de la fecha
+		add(new Label("fecha-fecha", new PropertyModel<String>(fecha, "fechaDia")));
 		// formulario
 		partidoForm = new FormPartidos("form-partidos");
 		partidoForm.setOutputMarkupId(true);

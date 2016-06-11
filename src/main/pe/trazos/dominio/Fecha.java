@@ -4,6 +4,7 @@ import org.hibernate.annotations.SortComparator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 import java.util.SortedSet;
@@ -44,6 +45,11 @@ public class Fecha implements Serializable, Comparable<Fecha> {
 
 	public Date getFecha() {
 		return fecha;
+	}
+
+	public String getFechaDia() {
+		final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		return dateFormat.format(getFecha());
 	}
 
 	public Integer getId() {

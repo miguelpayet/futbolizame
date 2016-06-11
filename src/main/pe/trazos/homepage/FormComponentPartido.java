@@ -45,7 +45,9 @@ public class FormComponentPartido extends FormComponentPanel {
 	}
 
 	private void agregarTitulo() {
-		add(new Label("fecha", new Model<>(partido.getFechaPartido())));
+		//add(new Label("fecha", new Model<>(partido.getFechaPartido())));
+		add(new Label("ubicacion", "por definir"));
+		add(new Label("hora", "por definir"));
 	}
 
 	private void agregarVisita() {

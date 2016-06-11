@@ -34,9 +34,11 @@ public class FutbolizameApplication extends WebApplication {
 	public void init() {
 		super.init();
 		Bootstrap.install(this);
+/*
 		if (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
 			getDebugSettings().setOutputComponentPath(true);
 		}
+		*/
 		getRequestCycleListeners().add(new HibernateRequestListener());
 	}
 

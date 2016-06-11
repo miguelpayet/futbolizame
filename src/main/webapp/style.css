@@ -1,3 +1,59 @@
+.cabecera-pagina {
+background-image:url(images/cabecera-pagina.jpg);
+background-repeat:repeat-x;
+margin:0 0 10px;
+}
+
+.botones .anterior {
+  text-align: left;
+}
+
+.botones .siguiente {
+  text-align: right;
+}
+
+.partidos {
+  margin: 20px 0 0 0;
+}
+.explicacion {
+  margin: 10px 0;
+  border: 1px solid #ddd000;
+  border-radius: 7px;
+  background-color: #ffee
+}
+
+.intro {
+background-color:#fffddd;
+border:1px solid #fff000;
+  border-radius: 7px;
+margin:10px 0;
+}
+
+.intro .descripcion {
+font-size:1.25em;
+}
+
+.intro .titulo {
+font-size:2em;
+font-weight:700;
+}
+
+.partido {
+border-top:1px solid #000;
+border-bottom:1px solid #000;
+background-color: #eee;
+margin:5px 0;
+padding: 5px 0;
+overflow:auto;
+}
+
+.partido ul {
+font-size:.8em;
+list-style-type:none;
+margin:0;
+padding:0;
+}
+
 .partidos .centro {
 padding-bottom:.25em;
 padding-top:.25em;
@@ -5,19 +61,16 @@ test-align:center;
 }
 
 .partidos .equipo.centro {
-border-top:1px solid #ccc;
 }
 
 .partidos .equipo.local {
-border-top:1px solid #ccc;
 padding:.25em 0;
-text-align:right;
+text-align:left;
 }
 
 .partidos .equipo.visita {
-border-top:1px solid #ccc;
 padding:.25em 0;
-text-align:left;
+text-align:right;
 }
 
 .partidos .fecha {
@@ -32,6 +85,30 @@ text-align:right;
 .partidos .goles.visita {
 padding:.25em 0;
 text-align:left;
+}
+
+.pie {
+background-image:url(images/pie-pagina.jpg);
+background-repeat:repeat-x;
+height:50px;
+margin:10px 0;
+}
+
+.tabla .fila-1,.tabla .fila-2,.tabla .fila-3,.tabla .fila-4 {
+background-color:#BFB;
+}
+
+.tabla .fila-5 {
+background-color:#FFB;
+}
+
+.tabla .fila-6,.tabla .fila-7,.tabla .fila-8,.tabla .fila-9,.tabla .fila-10 {
+background-color:#FBB;
+}
+
+.tabla td {
+border:1px dotted #ddd;
+padding:.25em;
 }
 
 .tabla td.goles {
@@ -58,52 +135,57 @@ text-align:right;
 width:4em;
 }
 
+.tabla th {
+padding:.25em;
+text-align:center;
+}
+
 .tabla thead {
 border:solid 0 #999;
 border-bottom-width:1px;
 text-align:center;
 }
 
+.tabla tr {
+border-bottom:1px dotted #ddd;
+line-height:1.5em;
+}
+
+.actualizar {
+text-align:center;
+margin: 5px 0;}
+
+a.button {
+  font-size: 110%;
+  color: #000;
+  border: 1px solid #000;
+  padding: 5px 6px;
+  background-color: #aadd00;
+  border-radius: 8px;
+}
+
+.tabla-titulo {
+background-color:#FFD;
+border:1px solid #FF0;
+  border-radius: 7px;
+margin:10px 0;
+padding:5px;
+text-align:center;
+}
+
+.tabla-titulo .titulo {
+font-weight:700;
+}
+
 a,a:visited,a:hover,a:active {
 color:#6493D2;
 }
 
-.tabla th {
+table.tabla {
+margin:auto;
+}
+
+.botones {
   text-align:center;
-  padding: 0.25em;
+height: 50px;
 }
-
-.tabla td {
-    padding: 0.25em;
-border: 1px dotted #ddd;
-}
-
-.tabla tr {
-border-bottom: 1px dotted #ddd;
-line-height: 1.5em;
-}
-
-.tabla .fila-1, .tabla .fila-2, .tabla .fila-3, .tabla .fila-4 {
-  background-color: #bbffbb;
-}
-
-.tabla .fila-5 {
-  background-color: #ffffbb
-}
-
-.tabla .fila-6, .tabla .fila-7, .tabla .fila-8, .tabla .fila-9, .tabla .fila-10 {
-  background-color: #ffbbbb
-}
-
-.pie {
-  margin: 10px 0;
-  height: 50px;
-  background-image: url(images/pie-pagina.jpg);
-  background-repeat: repeat-x;
-}
-
-.cabecera-pagina {
-  height: 81px;
-  margin-bottom: 10px;
-  background-image: url(images/cabecera-pagina.jpg);
-  background-repeat: repeat-x;}

@@ -2,7 +2,10 @@
 <wicket:panel>
     <div class="row">
         <div class="col-md-12">
-            <span wicket:id="nombre-fecha"></span>
+            <div class="tabla-titulo">
+                <span class="titulo" wicket:id="nombre-fecha"></span>
+                <span class="descripcion" wicket:id="fecha-fecha">fecha</span>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -11,10 +14,19 @@
                 <div class="repetidor" wicket:id="repeater">
                     <div wicket:id="item-partido"></div>
                 </div>
-                <a wicket:id="boton-actualizar">actualizar</a>
+                <div class="row">
+                    <div class="explicacion col-md-12">
+                        <p>pronostica cada partido, presiona "actualizar" y revisa los cambios en la tabla de
+                            posiciones</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="botones col-md-12">
+                        <a class="button" wicket:id="boton-actualizar">actualizar</a>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
-
 </wicket:panel>
 </html>
