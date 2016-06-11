@@ -84,7 +84,7 @@ CREATE TABLE `participacion` (
   KEY `fk_participante_partido1_idx` (`idpartido`),
   CONSTRAINT `fk_participante_partido1` FOREIGN KEY (`idpartido`) REFERENCES `partido` (`idpartido`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_partido_equipo1` FOREIGN KEY (`idequipo`) REFERENCES `equipo` (`idequipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-w) ENGINE=InnoDB AUTO_INCREMENT=3100 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3100 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -138,86 +138,15 @@ DROP TABLE IF EXISTS `pronostico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pronostico` (
-  `idpronostico` int(11) NOT NULL AUTO_INCREMENT,
   `userid` varchar(45) NOT NULL,
   `idparticipacion` int(11) NOT NULL,
   `goles` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idpronostico`),
-  UNIQUE KEY `idpronostico_UNIQUE` (`idpronostico`),
+  PRIMARY KEY (`userid`,`idparticipacion`),
   KEY `fk_pronostico_visitante1_idx` (`userid`),
   KEY `fk_pronostico_participacion1_idx` (`idparticipacion`),
   CONSTRAINT `fk_pronostico_participacion1` FOREIGN KEY (`idparticipacion`) REFERENCES `participacion` (`idparticipacion`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_pronostico_visitante1` FOREIGN KEY (`userid`) REFERENCES `visitante` (`userid`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `rol`
---
-
-DROP TABLE IF EXISTS `rol`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `rol` (
-  `idrol` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(45) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`idrol`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `tokenpassword`
---
-
-DROP TABLE IF EXISTS `tokenpassword`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tokenpassword` (
-  `idtoken` int(11) NOT NULL AUTO_INCREMENT,
-  `token` varchar(256) COLLATE utf8_bin NOT NULL,
-  `usuario` varchar(145) COLLATE utf8_bin NOT NULL,
-  `creacion` datetime NOT NULL,
-  `tipo` enum('Usuario','Email') COLLATE utf8_bin NOT NULL,
-  `valido` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`idtoken`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `usuario`
---
-
-DROP TABLE IF EXISTS `usuario`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `usuario` (
-  `idusuario` int(11) NOT NULL AUTO_INCREMENT,
-  `codigo` varchar(45) COLLATE utf8_bin DEFAULT NULL,
-  `nombre` varchar(45) COLLATE utf8_bin DEFAULT NULL,
-  `apellidos` varchar(45) COLLATE utf8_bin DEFAULT NULL,
-  `password` varchar(250) COLLATE utf8_bin DEFAULT NULL,
-  `email` varchar(145) COLLATE utf8_bin DEFAULT NULL,
-  `salt` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`idusuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `usuario_rol`
---
-
-DROP TABLE IF EXISTS `usuario_rol`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `usuario_rol` (
-  `idrol` int(11) NOT NULL,
-  `idusuario` int(11) NOT NULL,
-  PRIMARY KEY (`idusuario`,`idrol`),
-  KEY `fk_usuario_rol_rol` (`idrol`),
-  KEY `fk_usuario_rol_usuario1` (`idusuario`),
-  CONSTRAINT `fk_usuario_rol_rol0` FOREIGN KEY (`idrol`) REFERENCES `rol` (`idrol`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_usuario_rol_usuario10` FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,6 +157,7 @@ DROP TABLE IF EXISTS `visitante`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `visitante` (
+  `tipo` int(11) DEFAULT NULL,
   `userid` varchar(45) NOT NULL,
   `nombre` varchar(45) DEFAULT NULL,
   `fecha` datetime DEFAULT NULL,
@@ -245,4 +175,4 @@ CREATE TABLE `visitante` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-19 19:19:10
+-- Dump completed on 2016-06-11 12:50:32
