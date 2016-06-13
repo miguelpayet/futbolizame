@@ -6,10 +6,12 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.collections.MultiMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pe.trazos.componentes.WebPageBase;
@@ -17,16 +19,17 @@ import pe.trazos.dao.HibernateUtil;
 import pe.trazos.dominio.Partido;
 import pe.trazos.dominio.Posicionable;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PanelFecha extends Panel {
 
 	private static final Logger log = LoggerFactory.getLogger(PanelFecha.class);
 
 	private ModeloFecha fecha;
+	private FeedbackPanel feedback;
 	private HomePage homePage;
-	private ArrayList<Posicionable> participantes;
+	private MultiMap<Integer, Posicionable> participantes; // el Integer es el ID del partido
 	private Form partidoForm;
 	private RepeatingView partidoRepetidor;
 
@@ -34,13 +37,14 @@ public class PanelFecha extends Panel {
 		super(unId);
 		fecha = unaFecha;
 		homePage = unaVentana;
-		participantes = new ArrayList<>();
+		participantes = new MultiMap<>();
 		agregarFecha();
 		agregarPartidos();
+		agregarFeedback();
 	}
 
 	public void addParticipante(Posicionable unPosicionable) {
-		participantes.add(unPosicionable);
+		participantes.addValue(unPosicionable.getPartido().getId(), unPosicionable);
 	}
 
 	private void agregarFecha() {
@@ -61,14 +65,24 @@ public class PanelFecha extends Panel {
 			protected void onSubmit(AjaxRequestTarget target, Form form) {
 				log.info("save.onsubmit");
 				grabar();
-				homePage.actualizar(target);
+				if (validarFechaCompleta()) {
+					homePage.actualizar(target);
+				} else {
+					target.add(feedback);
+				}
 			}
 		};
 		partidoForm.add(link);
 	}
 
+	private void agregarFeedback() {
+		feedback = new FeedbackPanel("feedback");
+		feedback.setOutputMarkupId(true);
+		partidoForm.add(feedback);
+	}
+
 	private void agregarPartidos() {
-		participantes = new ArrayList<>();
+		participantes = new MultiMap<>();
 		for (Partido p : fecha.getObject().getPartidos()) {
 			log.debug("partido: " + p);
 			crearUnPartido(p, partidoRepetidor);
@@ -115,12 +129,40 @@ public class PanelFecha extends Panel {
 
 	private void grabar() {
 		log.info("grabar");
+		// grabar partidos futuros
 		final Date ahora = new Date();
-		participantes.stream().filter(p -> ahora.before(p.getPartido().getFechaPartido())).forEach(p -> {
-			log.info("grabando " + p.toString());
-			HibernateUtil.getSessionFactory().getCurrentSession().saveOrUpdate(p);
-		});
+		for (Partido part : fecha.getObject().getPartidos()) {
+			List<Posicionable> pronosticos = participantes.get(part.getId());
+			pronosticos.stream().filter(p -> ahora.before(p.getPartido().getFechaPartido())).forEach(p -> {
+				log.info("grabando " + p.toString());
+				HibernateUtil.getSessionFactory().getCurrentSession().saveOrUpdate(p);
+			});
+		}
 
+	}
+
+	private boolean validarFechaCompleta() {
+		// recorre desde la fecha y pregunta si cada partido está pronosticado
+		boolean golesNulos = false;
+		boolean faltanPronosticos = false;
+		for (Partido part : fecha.getObject().getPartidos()) {
+			// validar si los dos participantes tienen un pronóstico que no es null
+			List<Posicionable> pronosticos = participantes.get(part.getId());
+			faltanPronosticos = (faltanPronosticos || (pronosticos.size() != 2));
+			for (Posicionable posi : pronosticos) {
+				golesNulos = (golesNulos || (posi.getGoles() == null));
+			}
+		}
+		if (faltanPronosticos) {
+			log.error("los pronósticos no están completos");
+			error("por alguna razón, no hemos captado todos tus pronósticos.");
+		}
+		if (golesNulos) {
+			// ¿podemos cambiar el estilo de un partido no pronosticado?
+			log.warn("hay goles nulos");
+			error("no puedes actualizar la tabla si no pronosticas todos los partidos");
+		}
+		return (!faltanPronosticos && !golesNulos);
 	}
 
 }
