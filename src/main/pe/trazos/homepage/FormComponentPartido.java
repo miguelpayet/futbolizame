@@ -9,7 +9,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import pe.trazos.auth.SesionWeb;
 import pe.trazos.dao.DaoPronostico;
-import pe.trazos.dominio.*;
+import pe.trazos.dominio.Participacion;
+import pe.trazos.dominio.Partido;
+import pe.trazos.dominio.Posicionable;
+import pe.trazos.dominio.Pronostico;
 
 public class FormComponentPartido extends FormComponentPanel {
 
@@ -33,10 +36,7 @@ public class FormComponentPartido extends FormComponentPanel {
 		add(new ContextImage("imagen-" + unSufijo, unaParticipacion.getEquipo().getLogo()));
 		add(new Label("nombre-" + unSufijo, new Model<>(unaParticipacion.getEquipo().getNombre())));
 		DaoPronostico dp = new DaoPronostico();
-		PronosticoPK pk = new PronosticoPK();
-		pk.setVisitante(SesionWeb.get().getVisitante());
-		pk.setParticipacion(unaParticipacion);
-		Posicionable p = dp.get(pk);
+		Posicionable p = dp.get(SesionWeb.get().getVisitante(), unaParticipacion);
 		if (p == null) {
 			p = new Pronostico().setParticipacion(unaParticipacion).setVisitante(SesionWeb.get().getVisitante());
 		}
