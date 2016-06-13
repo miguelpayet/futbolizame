@@ -1,31 +1,48 @@
+.actualizar {
+margin:5px 0;
+text-align:center;
+}
+
+.tabla td.imagen {
+  background-color: #fff;
+  border: 0px solid blue;
+}
+
+.fb-like {
+  float:right;
+}
+
+
+.botones {
+height:50px;
+text-align:center;
+}
+
+.botones .anterior {
+text-align:left;
+}
+
+.botones .siguiente {
+text-align:right;
+}
+
 .cabecera-pagina {
 background-image:url(images/cabecera-pagina.jpg);
 background-repeat:repeat-x;
 margin:0 0 10px;
 }
 
-.botones .anterior {
-  text-align: left;
-}
-
-.botones .siguiente {
-  text-align: right;
-}
-
-.partidos {
-  margin: 20px 0 0 0;
-}
 .explicacion {
-  margin: 10px 0;
-  border: 1px solid #ddd000;
-  border-radius: 7px;
-  background-color: #ffee
+background-color:#ffee;
+border:1px solid #ddd000;
+border-radius:7px;
+margin:10px 0;
 }
 
 .intro {
 background-color:#fffddd;
-border:1px solid #fff000;
-  border-radius: 7px;
+border:1px solid #ddd000;
+border-radius:7px;
 margin:10px 0;
 }
 
@@ -39,12 +56,12 @@ font-weight:700;
 }
 
 .partido {
-border-top:1px solid #000;
+background-color:#eee;
 border-bottom:1px solid #000;
-background-color: #eee;
+border-top:1px solid #000;
 margin:5px 0;
-padding: 5px 0;
 overflow:auto;
+padding:5px 0;
 }
 
 .partido ul {
@@ -54,13 +71,14 @@ margin:0;
 padding:0;
 }
 
+.partidos {
+margin:23px 0 0;
+}
+
 .partidos .centro {
 padding-bottom:.25em;
 padding-top:.25em;
 test-align:center;
-}
-
-.partidos .equipo.centro {
 }
 
 .partidos .equipo.local {
@@ -108,7 +126,7 @@ background-color:#FBB;
 
 .tabla td {
 border:1px dotted #ddd;
-padding:.25em;
+padding:.4em .25em;
 }
 
 .tabla td.goles {
@@ -136,7 +154,7 @@ width:4em;
 }
 
 .tabla th {
-padding:.25em;
+padding: .4em .25em;
 text-align:center;
 }
 
@@ -147,27 +165,14 @@ text-align:center;
 }
 
 .tabla tr {
-border-bottom:1px dotted #ddd;
+/*! border-bottom:1px dotted #ddd; */
 line-height:1.5em;
-}
-
-.actualizar {
-text-align:center;
-margin: 5px 0;}
-
-a.button {
-  font-size: 110%;
-  color: #000;
-  border: 1px solid #000;
-  padding: 5px 6px;
-  background-color: #aadd00;
-  border-radius: 8px;
 }
 
 .tabla-titulo {
 background-color:#FFD;
-border:1px solid #FF0;
-  border-radius: 7px;
+border:1px solid #ddd000;
+border-radius:7px;
 margin:10px 0;
 padding:5px;
 text-align:center;
@@ -181,11 +186,15 @@ a,a:visited,a:hover,a:active {
 color:#6493D2;
 }
 
-table.tabla {
-margin:auto;
+a.button {
+background-color:#AD0;
+border:1px solid #000;
+border-radius:8px;
+color:#000;
+font-size:110%;
+padding:5px 6px;
 }
 
-.botones {
-  text-align:center;
-height: 50px;
+table.tabla {
+margin:auto;
 }
