@@ -18,25 +18,16 @@ public class DaoPronostico extends Dao<Pronostico> {
 		return getSession().get(Pronostico.class, unaPk);
 	}
 
-	@Deprecated
 	public Pronostico get(Visitante unVisitante, Participacion unaParticipacion) {
-		Criteria criteria = getSession().createCriteria(getClaseEntidad());
-		criteria.add(Restrictions.and(
-				Restrictions.eq("visitante", unVisitante),
-				Restrictions.eq("participacion", unaParticipacion)
-		));
-		Pronostico pro = (Pronostico) criteria.uniqueResult();
-		if (pro == null) {
-			pro = new Pronostico();
-			pro.setVisitante(unVisitante);
-			pro.setParticipacion(unaParticipacion);
-		}
-		return pro;
+		PronosticoPK pk = new PronosticoPK();
+		pk.setVisitante(unVisitante);
+		pk.setParticipacion(unaParticipacion);
+		return get(pk);
 	}
 
 	public List<Pronostico> get(Visitante unVisitante) {
 		Criteria criteria = getSession().createCriteria(getClaseEntidad());
-		//criteria.add(Restrictions.eq("visitante", unVisitante.getUserId()));
+		criteria.add(Restrictions.eq("visitante", unVisitante.getUserId()));
 		List<Pronostico> pronosticos = criteria.list();
 		return pronosticos;
 	}
