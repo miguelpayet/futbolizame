@@ -7,17 +7,20 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pe.trazos.dao.DaoCompetencia;
 import pe.trazos.dao.DaoFecha;
 import pe.trazos.dao.HibernateUtil;
+import pe.trazos.dominio.Competencia;
 import pe.trazos.dominio.Fecha;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import static junit.framework.TestCase.assertNotNull;
 
 public class TestFecha extends TestBase {
-	private final Logger logger = LoggerFactory.getLogger(TestPronostico.class);
+
+	private static final Logger log = LoggerFactory.getLogger(TestPronostico.class);
 
 	@After
 	public void endTransaction() {
@@ -25,11 +28,32 @@ public class TestFecha extends TestBase {
 	}
 
 	@Test
-	public void leerFechasFuturas() {
+	public void leerFechasAnteriores() {
 		DaoFecha df = new DaoFecha();
-		List<Fecha> fechas = df.getFuturo(new Date());
-		assertNotNull(fechas);
-		Assert.assertNotEquals(fechas.size(), 0);
+		Fecha f = df.get(307);
+		Assert.assertNotNull(f);
+		if (f != null) {
+			Set<Fecha> fechas = df.listarAnteriores(f);
+			for (Fecha fl : fechas) {
+				log.info(fl.toString());
+			}
+		}
+	}
+
+	@Test
+	public void leerFechasFuturas() {
+		DaoCompetencia dc = new DaoCompetencia();
+		Competencia c = dc.get(1);
+		Assert.assertNotNull(c);
+		if (c != null) {
+			DaoFecha df = new DaoFecha();
+			Set<Fecha> fechas = df.listarFuturas(c, new Date());
+			assertNotNull(fechas);
+			Assert.assertNotEquals(fechas.size(), 0);
+			for (Fecha fl : fechas) {
+				log.info(fl.toString());
+			}
+		}
 	}
 
 	@Before
@@ -38,4 +62,5 @@ public class TestFecha extends TestBase {
 		sesion = sf.getCurrentSession();
 		sesion.beginTransaction();
 	}
+
 }
