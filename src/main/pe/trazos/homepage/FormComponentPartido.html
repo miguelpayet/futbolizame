@@ -1,30 +1,30 @@
 <html xmlns:wicket="http://www.w3.org/1999/xhtml">
 <wicket:panel>
     <div class="row">
-        <div class="partido">
-            <div class="col-md-3">
-                <ul>
-                    <li>hora:<span wicket:id="hora">por definir</span></li>
-                    <li>sitio:<span wicket:id="ubicacion">por definir</span></li>
-                </ul>
-            </div>
-            <div class="col-md-3 equipo local">
-                <img wicket:id="imagen-local"/>
-                <span wicket:id="nombre-local"></span>
-            </div>
-            <div class="col-md-3 goles local">
-                <input size="2" type="text" wicket:id="goles-local"/>
-                <img src="/images/goles.png"/>
-                <!--/div-->
-                <!--div class="col-md-1 equipo centro">vs.</div-->
-                <!--div class="col-md-1 goles visita"-->
-                <input size="2" type="text" wicket:id="goles-visita"/>
-            </div>
-            <div class="col-md-3 equipo visita">
-                <span wicket:id="nombre-visita"></span>
-                <img wicket:id="imagen-visita"/>
+        <div class="col-md-12">
+            <div class="partido">
+                <div class="info">
+                    <ul>
+                        <li>hora:<span wicket:id="hora">por definir</span></li>
+                        <li>sitio:<span wicket:id="ubicacion">por definir</span></li>
+                    </ul>
+                </div>
+                <div class="equipo local">
+                    <img wicket:id="imagen-local"/>
+                    <span class="nombre" wicket:id="nombre-local"></span>
+                </div>
+                <div class="goles local">
+                    <input size="2" type="text" wicket:id="goles-local"/>
+                    <img src="/images/goles.png"/>
+                    <input size="2" type="text" wicket:id="goles-visita"/>
+                </div>
+                <div class="equipo visita">
+                    <span class="nombre" wicket:id="nombre-visita"></span>
+                    <img wicket:id="imagen-visita"/>
+                </div>
             </div>
         </div>
     </div>
+
 </wicket:panel>
 </html>
