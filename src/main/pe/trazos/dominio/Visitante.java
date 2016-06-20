@@ -12,17 +12,17 @@ import java.util.Date;
 public class Visitante implements Serializable {
 
 	@Column(name = "fecha")
-	Date fecha;
+	private Date fecha;
 	@Column(name = "nombre")
-	String nombre;
+	private String nombre;
 	@Column(name = "tipo")
 	@Enumerated(EnumType.ORDINAL)
-	TipoSesion tipo;
+	private TipoSesion tipo;
 	@Column(name = "token")
-	String token;
+	private String token;
 	@Id
 	@Column(name = "userid")
-	String userId;
+	private String userId;
 
 	public Date getFecha() {
 		return fecha;
@@ -34,6 +34,10 @@ public class Visitante implements Serializable {
 
 	public String getNombre() {
 		return nombre;
+	}
+
+	public TipoSesion getTipo() {
+		return tipo;
 	}
 
 	public String getToken() {
