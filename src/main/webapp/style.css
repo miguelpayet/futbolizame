@@ -3,16 +3,6 @@ margin:5px 0;
 text-align:center;
 }
 
-.tabla td.imagen {
-  background-color: #fff;
-  border: 0px solid blue;
-}
-
-.fb-like {
-  float:right;
-}
-
-
 .botones {
 height:50px;
 text-align:center;
@@ -37,6 +27,10 @@ background-color:#ffee;
 border:1px solid #ddd000;
 border-radius:7px;
 margin:10px 0;
+}
+
+.fb-like {
+float:right;
 }
 
 .intro {
@@ -64,11 +58,40 @@ overflow:auto;
 padding:5px 0;
 }
 
-.partido ul {
+.partido .equipo {
+width:150px;
+}
+
+.partido .equipo.local .nombre {
+  font-size: 115%;
+    float: right;
+  padding-right: 10px;
+}
+
+.partido .equipo.visita .nombre {
+  font-size: 115%;
+float:left;
+  padding-left: 10px;
+}
+
+.partido .goles {
+width:125px;
+}
+
+.partido .info {
+width:100px;
+}
+
+.partido .info ul {
 font-size:.8em;
 list-style-type:none;
 margin:0;
-padding:0;
+padding:0 5px;
+}
+
+.partido .info,.partido .equipo,.partido .goles {
+display:table-cell;
+vertical-align:middle;
 }
 
 .partidos {
@@ -139,6 +162,11 @@ text-align:right;
 width:3em;
 }
 
+.tabla td.imagen {
+background-color:#fff;
+border:0 solid blue;
+}
+
 .tabla td.nombre {
 width:10em;
 }
@@ -154,7 +182,7 @@ width:4em;
 }
 
 .tabla th {
-padding: .4em .25em;
+padding:.4em .25em;
 text-align:center;
 }
 
@@ -165,7 +193,6 @@ text-align:center;
 }
 
 .tabla tr {
-/*! border-bottom:1px dotted #ddd; */
 line-height:1.5em;
 }
 
