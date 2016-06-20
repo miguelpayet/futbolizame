@@ -3,9 +3,10 @@ package pe.trazos.componentes;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.GenericWebPage;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.wicketstuff.facebook.behaviors.LogoutEventBehavior;
 import org.wicketstuff.facebook.plugins.LikeButton;
 import org.wicketstuff.facebook.plugins.LoginButton;
 import pe.trazos.auth.SesionWeb;
+import pe.trazos.homepage.HomePage;
 import pe.trazos.homepage.LoginStatusEventBehavior;
 import pe.trazos.web.FutbolizameApplication;
 
@@ -36,9 +38,9 @@ public abstract class WebPageBase extends GenericWebPage {
 		String facebookid = FutbolizameApplication.get().getInitParameter("facebook-app-id");
 		log.debug("app id {}", facebookid);
 		FacebookSdk fsdk = new FacebookSdk("fb-root", facebookid);
-		fsdk.setOgProperty("url", "http://local.futboliza.me");
+		fsdk.setOgProperty("url", getUrlBase());
 		fsdk.setOgProperty("type", "website");
-		fsdk.setOgProperty("description", "esta es mi descripción");
+		fsdk.setOgProperty("description", "pronósitco de la eliminatoria a rusia 2018 en sudamérica");
 		add(fsdk);
 		final IModel<String> url = Model.of("http://futboliza.me"); // todo: no en duro
 		final LikeButton likeButton = new LikeButton("likeButton", url);
@@ -55,19 +57,6 @@ public abstract class WebPageBase extends GenericWebPage {
 				doLogin(userId, accessToken, target);
 			}
 		});
-/*
-		add(new AuthStatusChangeEventBehavior() {
-			@Override
-			protected void onSessionEvent(AjaxRequestTarget target, String status, String userId, String signedRequest, String expiresIn, String accessToken) {
-				log.info("status change event: " + status);
-				if (status.equals("connected")) {
-					doLogin(userId, accessToken, target);
-				} else if (status.equals("unknown")) {
-					doLogout(target);
-				}
-			}
-		});
-		*/
 		add(new LogoutEventBehavior() {
 			@Override
 			protected void onLogout(AjaxRequestTarget target, String status) {
@@ -93,13 +82,12 @@ public abstract class WebPageBase extends GenericWebPage {
 
 	protected abstract void doLogout(AjaxRequestTarget unTarget);
 
-	protected void feedback() {
-		FeedbackPanel feedback = new FeedbackPanel("feedback");
-		add(feedback);
-	}
-
 	protected SesionWeb getSesion() {
 		return SesionWeb.get();
+	}
+
+	private String getUrlBase() {
+		return RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(urlFor(HomePage.class, null).toString()));
 	}
 
 }
