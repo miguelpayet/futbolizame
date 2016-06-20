@@ -118,7 +118,10 @@ public class Partido implements Serializable {
 	}
 
 	public String toString() {
-		return String.format("%s vs %s (%s)", getLocal().getEquipo().getNombre(), getVisita().getEquipo().getNombre(), getFechaPartido());
+		Participacion local = participantes.get(true);
+		Participacion visita = participantes.get(false);
+		Date fecha = getFechaPartido();
+		return String.format("%s vs %s (%s)", local != null ? local.getEquipo().getNombre() : "sin local", visita != null ? visita.getEquipo().getNombre() : "sin visita", fecha != null ? fecha : "sin fecha");
 	}
 
 }
