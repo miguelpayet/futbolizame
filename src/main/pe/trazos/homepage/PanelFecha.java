@@ -89,9 +89,12 @@ public class PanelFecha extends Panel {
 		}
 	}
 
+	@Deprecated
+	@SuppressWarnings("unused")
 	private void crearPartidos() {
 		RepeatingView nuevoRepetidor = new RepeatingView("repeater");
 		nuevoRepetidor.setOutputMarkupId(true);
+		log.info("repetidor {}", nuevoRepetidor.getMarkupId());
 		for (Partido p : fecha.getObject().getPartidos()) {
 			crearUnPartido(p, nuevoRepetidor);
 		}
@@ -116,6 +119,7 @@ public class PanelFecha extends Panel {
 		unRepetidor.add(partidoExterior);
 	}
 
+	@SuppressWarnings("unused")
 	private Component getParentWindow(Component unComponente) {
 		log.debug(unComponente.getClass().getName() + " " + unComponente.toString());
 		if (unComponente.getParent() == null) {
