@@ -1,11 +1,13 @@
 package pe.trazos.dominio;
 
 import org.hibernate.annotations.SortComparator;
+import pe.trazos.dao.DaoPronostico;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -32,6 +34,14 @@ public class Fecha implements Serializable, Comparable<Fecha> {
 	private SortedSet<Partido> partidos;
 
 	public Fecha() {
+	}
+
+	/**
+	 * retorna un indicador si aplican los pronósticos para esta fecha
+	 * se puede pronosticar (y se consideran pronósticos) mientras la fecha es posterior a la fecha calendario
+	 */
+	public boolean aplicaPronostico() {
+		return getFecha().after(new Date());
 	}
 
 	@Override
@@ -88,15 +98,41 @@ public class Fecha implements Serializable, Comparable<Fecha> {
 		this.numero = numero;
 	}
 
+	/**
+	 * valida si el visitante actual de la competencia ha pronosticado completa la fecha
+	 *
+	 * @return true si el visitante ha pronosticado completa la fecha
+	 */
+	public boolean tienePronostico() {
+		// ver todos los partidos de la fecha y buscar los pronosticos de cada uno
+		// obtiene todos los pronosticos de la fecha y visitante
+		DaoPronostico dp = new DaoPronostico();
+		Map<Participacion, Pronostico> pronosticos = dp.obtenerValidos(this);
+		// compara que cada participante tenga un pronóstico
+		boolean completo = true;
+		for (Partido part : getPartidos()) {
+			for (Participacion parti : part.getParticipantes().values()) {
+				completo = completo && pronosticos.containsKey(parti);
+			}
+		}
+		return completo;
+	}
+
 	@Override
 	public String toString() {
 		String titulo;
+		String id;
+		if (getId() != null) {
+			id = String.valueOf(getId());
+		} else {
+			id = "sin id";
+		}
 		if (getNombre() != null) {
 			titulo = getNombre();
 		} else {
 			titulo = "sin nombre";
 		}
-		return String.format("fecha %s", titulo);
+		return String.format("fecha %s - %s", id, titulo);
 	}
 
 }
