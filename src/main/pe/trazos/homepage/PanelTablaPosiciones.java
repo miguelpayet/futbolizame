@@ -30,6 +30,7 @@ public class PanelTablaPosiciones extends Panel {
 		calcularPosiciones();
 		agregarTabla();
 		agregarGrid();
+		// todo: agregar contador de fechas pronosticadas
 	}
 
 	private void agregarGrid() {
