@@ -5,25 +5,17 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pe.trazos.componentes.WebPageBase;
 import pe.trazos.dominio.Fecha;
-import pe.trazos.dominio.Participacion;
-import pe.trazos.dominio.Partido;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class HomePage extends WebPageBase {
 
-	protected static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	private static final Logger log = LoggerFactory.getLogger(HomePage.class);
 
 	private ModeloCompetencia competencia;
-	private ModeloFecha fecha;
 	private WebMarkupContainer fechaExterior;
 	private Component fechaPanel;
 	private WebMarkupContainer tablaExterior;
@@ -41,9 +33,9 @@ public class HomePage extends WebPageBase {
 
 	public void actualizar(AjaxRequestTarget unTarget) {
 		// tabla de posiciones
-		crearTablaPosiciones();
+		reemplazarTablaPosiciones();
 		// partidos
-		crearFecha();
+		reemplazarFecha();
 		// elementos a refrescar
 		unTarget.add(tablaExterior);
 		unTarget.add(fechaExterior);
@@ -54,10 +46,12 @@ public class HomePage extends WebPageBase {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				log.info("fecha anterior");
-				Fecha fechaAnterior = competencia.getObject().getFechaAnterior(fecha.getObject());
-				if (fechaAnterior != null) {
-					reemplazarFecha(fechaAnterior);
+				competencia.getObject().setFechaAnterior();
+				if (competencia.getObject().getFechaActual() != null) {
+					reemplazarTablaPosiciones();
+					reemplazarFecha();
 					target.add(fechaExterior);
+					target.add(tablaExterior);
 				}
 			}
 		};
@@ -66,10 +60,12 @@ public class HomePage extends WebPageBase {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				log.info("fecha siguiente");
-				Fecha fechaSiguiente = competencia.getObject().getFechaSiguiente(fecha.getObject());
-				if (fechaSiguiente != null) {
-					reemplazarFecha(fechaSiguiente);
+				competencia.getObject().setFechaSiguiente();
+				if (competencia.getObject().getFechaActual() != null) {
+					reemplazarTablaPosiciones();
+					reemplazarFecha();
 					target.add(fechaExterior);
+					target.add(tablaExterior);
 				}
 			}
 		};
@@ -84,7 +80,7 @@ public class HomePage extends WebPageBase {
 		fechaExterior = new WebMarkupContainer("exterior-fecha");
 		fechaExterior.setOutputMarkupId(true);
 		add(fechaExterior);
-		fechaPanel = new Label("panel-fecha", "hola");
+		fechaPanel = new Label("panel-fecha", "si tienes tiempo de leer esto es porque algo no funcionó correctamente");
 		fechaExterior.add(fechaPanel);
 	}
 
@@ -92,23 +88,8 @@ public class HomePage extends WebPageBase {
 		tablaExterior = new WebMarkupContainer("exterior-tabla");
 		tablaExterior.setOutputMarkupId(true);
 		add(tablaExterior);
-		tablaPanel = new Label("panel-tabla", "hola");
+		tablaPanel = new Label("panel-tabla", "si tienes tiempo de leer esto es porque algo no funcionó correctamente");
 		tablaExterior.add(tablaPanel);
-	}
-
-	private void agregarUnaEstadistica(String unId, Partido unPartido, Participacion unaParticipacion, Fragment unContainer) {
-	}
-
-	private void crearFecha() {
-		Component nuevoPanel = new PanelFecha("panel-fecha", fecha, this);
-		fechaPanel.replaceWith(nuevoPanel);
-		fechaPanel = nuevoPanel;
-	}
-
-	private void crearTablaPosiciones() {
-		Component nuevoPanel = new PanelTablaPosiciones("panel-tabla", competencia);
-		tablaPanel.replaceWith(nuevoPanel);
-		tablaPanel = nuevoPanel;
 	}
 
 	@Override
@@ -132,13 +113,10 @@ public class HomePage extends WebPageBase {
 		actualizar(unTarget);
 	}
 
-	protected void formSubmit() {
-		log.debug("formSubmit");
-	}
-
 	private void init() {
+		log.debug("init");
 		competencia = new ModeloCompetencia();
-		fecha = new ModeloFecha(competencia.getObject().getFechaSiguiente(new Date()));
+		competencia.getObject().setFechaProxima();
 	}
 
 	private void initPagina() throws RuntimeException {
@@ -152,9 +130,17 @@ public class HomePage extends WebPageBase {
 		competencia.detach();
 	}
 
-	private void reemplazarFecha(Fecha unaFecha) {
-		fecha = new ModeloFecha(unaFecha);
-		crearFecha();
+	private void reemplazarFecha() {
+		Fecha fechaActual = competencia.getObject().getFechaActual();
+		Component nuevoPanel = new PanelFecha("panel-fecha", new ModeloFecha(fechaActual), this);
+		fechaPanel.replaceWith(nuevoPanel);
+		fechaPanel = nuevoPanel;
+	}
+
+	private void reemplazarTablaPosiciones() {
+		Component nuevoPanel = new PanelTablaPosiciones("panel-tabla", competencia);
+		tablaPanel.replaceWith(nuevoPanel);
+		tablaPanel = nuevoPanel;
 	}
 
 }

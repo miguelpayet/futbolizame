@@ -35,14 +35,14 @@ public class TestConcurso extends TestBase {
 		Transaction tran = sesion.beginTransaction();
 		Competencia con = traerConcurso(sesion, 1);
 		assertNotNull(con);
-		Fecha fecha = con.getFechaSiguiente(new Date());
-		assertNotNull(fecha);
-		assertThat(fecha.getNumero(), is(7));
+		con.setFechaSiguiente(new Date());
+		assertNotNull(con.getFechaActual());
+		assertThat(con.getFechaActual().getNumero(), is(7));
 		tran.rollback();
 	}
 
 	private Competencia traerConcurso(Session unaSesion, int unId) {
-		return (Competencia) unaSesion.get(Competencia.class, unId);
+		return unaSesion.get(Competencia.class, unId);
 	}
 
 }

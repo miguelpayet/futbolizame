@@ -4,7 +4,9 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.slf4j.LoggerFactory;
 import pe.trazos.auth.SesionWeb;
 import pe.trazos.dao.DaoCompetencia;
+import pe.trazos.dao.DaoFecha;
 import pe.trazos.dominio.Competencia;
+import pe.trazos.dominio.Fecha;
 import pe.trazos.dominio.Posicion;
 import pe.trazos.dominio.Posicionable;
 import pe.trazos.web.FutbolizameApplication;
@@ -18,6 +20,7 @@ public class ModeloCompetencia extends LoadableDetachableModel<Competencia> {
 	private static final org.slf4j.Logger log = LoggerFactory.getLogger(ModeloCompetencia.class);
 
 	private Integer idCompetencia;
+	private Integer idFecha;
 	private List<? extends Posicionable> participantes;
 
 	public ModeloCompetencia() {
@@ -66,6 +69,11 @@ public class ModeloCompetencia extends LoadableDetachableModel<Competencia> {
 		if (c == null) {
 			throw new RuntimeException("no está creado el objeto competencia");
 		}
+		if (idFecha != null) {
+			DaoFecha df = new DaoFecha();
+			Fecha f = df.get(idFecha);
+			c.setFechaActual(f);
+		}
 		return c;
 	}
 
@@ -78,6 +86,9 @@ public class ModeloCompetencia extends LoadableDetachableModel<Competencia> {
 	protected void onDetach() {
 		log.debug("onDetach");
 		idCompetencia = getObject().getId();
+		if (getObject().getFechaActual() != null) {
+			idFecha = getObject().getFechaActual().getId();
+		}
 	}
 
 }

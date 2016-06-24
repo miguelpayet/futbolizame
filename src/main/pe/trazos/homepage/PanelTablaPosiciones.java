@@ -51,11 +51,18 @@ public class PanelTablaPosiciones extends Panel {
 		tablaExterior.add(tablaGrid);
 	}
 
+	/**
+	 * agregar a la página los elementos para el render de la tabla de posiciones
+	 * agrega el título y el WebMarkupContainer exterior
+	 */
 	protected void agregarTabla() {
 		// título de la tabla
 		Label tituloTabla = new Label("titulo-tabla", new PropertyModel<String>(competencia, "titulo"));
-		tituloTabla.setOutputMarkupId(true);
+		//tituloTabla.setOutputMarkupId(true);
 		add(tituloTabla);
+		// subtitulo
+		Label subTituloTabla = new Label("subtitulo-tabla", new PropertyModel<>(competencia, "subTitulo"));
+		add(subTituloTabla);
 		// elemento exterior para la tabla
 		tablaExterior = new WebMarkupContainer("panel-tabla");
 		tablaExterior.setOutputMarkupId(true);

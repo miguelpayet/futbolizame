@@ -20,7 +20,7 @@ public class ModeloFecha extends LoadableDetachableModel<Fecha> {
 
 	@Override
 	protected Fecha load() {
-		log.debug("onDetach");
+		log.debug("load");
 		DaoFecha df = new DaoFecha();
 		Fecha f = df.get(idFecha);
 		return f;
@@ -32,21 +32,3 @@ public class ModeloFecha extends LoadableDetachableModel<Fecha> {
 	}
 
 }
-
-/*
-		// identificar próxima fecha (primera fecha del futuro)
-		if (idFecha == null) {
-			fecha = competencia.getFechaSiguiente(new Date());
-		} else {
-			DaoFecha df = new DaoFecha();
-			fecha = df.get(idFecha);
-		}
-		if (fecha == null) {
-			throw new RuntimeException("no existe próxima fecha");
-		}
-		idFecha = fecha.getId();
-
-				// copiar variables necesarias para resucitar
-		idFecha = fecha.getId();
-
- */

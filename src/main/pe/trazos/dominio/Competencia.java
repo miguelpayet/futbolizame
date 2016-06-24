@@ -20,10 +20,13 @@ public class Competencia implements Serializable {
 	static final int PUNTOS_DERROTA = 0;
 	static final int PUNTOS_EMPATE = 1;
 	static final int PUNTOS_VICTORIA = 3;
+
 	private static final Logger log = LoggerFactory.getLogger(Competencia.class);
 
 	@Column(name = "actualizado")
 	private Date actualizado;
+	@Transient
+	private Fecha fechaActual;
 	@OneToMany(mappedBy = "competencia", cascade = CascadeType.ALL)
 	@SortComparator(ComparadorFecha.class)
 	private SortedSet<Fecha> fechas;
@@ -36,35 +39,39 @@ public class Competencia implements Serializable {
 	@Column(name = "numero")
 	private Integer numero;
 	@Transient
-	Map<String, Posicion> posiciones;
+	private Map<String, Posicion> posiciones;
 	@Transient
-	Visitante visitante;
+	private Visitante visitante;
 
 	public Competencia() {
 		posiciones = new HashMap<>();
 	}
 
-	public void clearVisitante() {
-		visitante = null;
-	}
-
 	public void crearPosiciones() {
 		log.debug("crear posiciones");
+		Date fechaLimite;
+		if (getFechaActual() == null) {
+			fechaLimite = null;
+		} else {
+			fechaLimite = getFechaActual().getFecha();
+		}
 		resetPosiciones();
 		for (Fecha fec : fechas) {
 			log.debug("{}", fec);
-			for (Partido partido : fec.getPartidos()) {
-				log.trace("{}", partido);
-				Map<Boolean, Participacion> participantes = partido.getParticipantes();
-				// buscar los pronosticos y armar el mapa de pronosticos
-				Map<Boolean, Pronostico> pronosticoPartido = obtenerPronosticos(participantes);
-				// calcular las posiciones para los 2 participantes
-				if (pronosticoPartido != null) {
-					log.trace("usando pronóstico");
-					crearUnaPosicion(pronosticoPartido);
-				} else {
-					log.trace("usando participantes");
-					crearUnaPosicion(participantes);
+			if (fechaLimite == null || !fec.getFecha().after(fechaLimite)) {
+				for (Partido partido : fec.getPartidos()) {
+					log.trace("{}", partido);
+					Map<Boolean, Participacion> participantes = partido.getParticipantes();
+					// buscar los pronosticos y armar el mapa de pronosticos
+					Map<Boolean, Pronostico> pronosticoPartido = obtenerPronosticos(participantes);
+					// calcular las posiciones para los 2 participantes
+					if (pronosticoPartido != null) {
+						log.trace("usando pronóstico");
+						crearUnaPosicion(pronosticoPartido);
+					} else {
+						log.trace("usando participantes");
+						crearUnaPosicion(participantes);
+					}
 				}
 			}
 		}
@@ -83,39 +90,8 @@ public class Competencia implements Serializable {
 		}
 	}
 
-	public Date getActualizado() {
-		return actualizado;
-	}
-
-	public Fecha getFechaAnterior(Fecha unaFecha) {
-		Fecha fechaMenor = null;
-		for (Fecha f : getFechas()) {
-			if (f.getFecha().before(unaFecha.getFecha())) {
-				log.debug("fecha anterior {}", f);
-				// la mayor fecha de la colección que sea menor a la que pidieron
-				fechaMenor = f;
-			}
-		}
-		return fechaMenor;
-	}
-
-	public Fecha getFechaSiguiente(Fecha unaFecha) {
-		for (Fecha f : getFechas()) {
-			log.debug("fecha siguiente {}", f);
-			if (f.getFecha().after(unaFecha.getFecha())) {
-				return f;
-			}
-		}
-		return null;
-	}
-
-	public Fecha getFechaSiguiente(Date unaFecha) {
-		for (Fecha fecha : fechas) {
-			if (fecha.getFecha().compareTo(unaFecha) > 0) {
-				return fecha;
-			}
-		}
-		return null;
+	public Fecha getFechaActual() {
+		return fechaActual;
 	}
 
 	public SortedSet<Fecha> getFechas() {
@@ -138,8 +114,34 @@ public class Competencia implements Serializable {
 		return posiciones;
 	}
 
+	/**
+	 * usado por wicket para obtener el subtitulo (actualizado hasta fecha) de la competencia
+	 *
+	 * @return tìtulo de la competencia
+	 */
+	@SuppressWarnings("unused")
+	public String getSubTitulo() {
+		String subtitulo = "";
+		if (fechaActual != null) {
+			subtitulo = "actualizado hasta la " + fechaActual.getNombre();
+		} else {
+			subtitulo = "";
+		}
+		return subtitulo;
+	}
+
+	/**
+	 * usado por wicket para obtener el tìtulo de la competencia
+	 *
+	 * @return tìtulo de la competencia
+	 */
+	@SuppressWarnings("unused")
 	public String getTitulo() {
 		return "tabla de posiciones " + (nombre != null ? nombre : "");
+	}
+
+	public Visitante getVisitante() {
+		return visitante;
 	}
 
 	private Posicion obtenerPosicion(Posicionable unPosicionable) {
@@ -202,8 +204,42 @@ public class Competencia implements Serializable {
 		this.actualizado = actualizado;
 	}
 
-	public void setFechas(SortedSet<Fecha> fechas) {
-		this.fechas = fechas;
+	public void setFechaActual(Fecha fechaActual) {
+		this.fechaActual = fechaActual;
+	}
+
+	public void setFechaAnterior() {
+		Fecha fechaMenor = null;
+		for (Fecha f : getFechas()) {
+			if (f.getFecha().before(fechaActual.getFecha())) {
+				log.debug("fecha anterior {}", f);
+				// la mayor fecha de la colección que sea menor a la que pidieron
+				fechaMenor = f;
+			}
+		}
+		fechaActual = fechaMenor;
+	}
+
+	public void setFechaProxima() {
+		setFechaSiguiente(new Date());
+	}
+
+	public void setFechaSiguiente() {
+		setFechaSiguiente(fechaActual.getFecha());
+	}
+
+	/**
+	 * fechas es una lista ordenada por la fecha calendario. busca la primera fecha que sea mayor al parametro
+	 *
+	 * @param unaFecha -> representa a la fecha calendario
+	 */
+	public void setFechaSiguiente(Date unaFecha) {
+		for (Fecha f : fechas) {
+			if (f.getFecha().after(unaFecha)) {
+				fechaActual = f;
+				break;
+			}
+		}
 	}
 
 	public void setNombre(String nombre) {
