@@ -71,8 +71,8 @@ public class TestPronostico extends TestBase {
 			// si está pronosticada completamente por el visitante devuelve rtue, si no false
 			log.info("tiene pronóstico {} ", f.tienePronostico());
 			// si ya pasó la fecha y no aplica pronostico
-			f.aplicaPronostico();
-			log.info("aplica pronosticar {} ", f.aplicaPronostico());
+			f.aplicaPronosticar();
+			log.info("aplica pronosticar {} ", f.aplicaPronosticar());
 		}
 	}
 
