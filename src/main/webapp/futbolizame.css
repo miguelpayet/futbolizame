@@ -1,0 +1,223 @@
+.actualizar {
+margin:5px 0;
+text-align:center;
+}
+
+.botones {
+height:50px;
+text-align:center;
+}
+
+.botones .anterior {
+text-align:left;
+}
+
+.botones .siguiente {
+text-align:right;
+}
+
+.cabecera-pagina {
+background-image:url(images/cabecera-pagina.jpg);
+background-repeat:repeat-x;
+margin:0 0 10px;
+}
+
+.explicacion {
+background-color:#ffee;
+border:1px solid #ddd000;
+border-radius:7px;
+margin:10px 0;
+}
+
+.fb-like {
+float:right;
+}
+
+.intro {
+background-color:#fffddd;
+border:1px solid #ddd000;
+border-radius:7px;
+margin:10px 0;
+}
+
+.intro .descripcion {
+font-size:1.25em;
+}
+
+.intro .titulo {
+font-size:2em;
+font-weight:700;
+}
+
+.partido {
+background-color:#eee;
+border-bottom:1px solid #000;
+border-top:1px solid #000;
+margin:5px 0;
+overflow:auto;
+padding:5px 0;
+}
+
+.partido .equipo {
+width:150px;
+}
+
+.partido .equipo.local .nombre {
+float:right;
+font-size:115%;
+padding-right:10px;
+}
+
+.partido .equipo.visita .nombre {
+float:left;
+font-size:115%;
+padding-left:10px;
+}
+
+.partido .goles {
+padding:.25em 0;
+text-align:right;
+width:125px;
+}
+
+.partido .goles input {
+width:40px;
+}
+
+.partido .info {
+width:100px;
+}
+
+.partido .info ul {
+font-size:.8em;
+list-style-type:none;
+margin:0;
+padding:0 5px;
+}
+
+.partido .info,.partido .equipo,.partido .goles {
+display:table-cell;
+vertical-align:middle;
+}
+
+.partidos {
+margin:23px 0 0;
+}
+
+.partidos .centro {
+padding-bottom:.25em;
+padding-top:.25em;
+test-align:center;
+}
+
+.partidos .equipo.local {
+padding:.25em 0;
+text-align:left;
+}
+
+.partidos .equipo.visita {
+padding:.25em 0;
+text-align:right;
+}
+
+.partidos .fecha {
+padding:.5em 0;
+}
+
+.pie {
+background-image:url(images/pie-pagina.jpg);
+background-repeat:repeat-x;
+height:50px;
+margin:10px 0;
+}
+
+.tabla .fila-1,.tabla .fila-2,.tabla .fila-3,.tabla .fila-4 {
+background-color:#BFB;
+}
+
+.tabla .fila-5 {
+background-color:#FFB;
+}
+
+.tabla .fila-6,.tabla .fila-7,.tabla .fila-8,.tabla .fila-9,.tabla .fila-10 {
+background-color:#FBB;
+}
+
+.tabla td {
+border:1px dotted #ddd;
+padding:.4em .25em;
+}
+
+.tabla td.goles {
+text-align:right;
+width:3em;
+}
+
+.tabla td.goles-diferencia {
+text-align:right;
+width:3em;
+}
+
+.tabla td.imagen {
+background-color:#fff;
+border:0 solid blue;
+}
+
+.tabla td.nombre {
+width:10em;
+}
+
+.tabla td.partidos {
+text-align:right;
+width:3em;
+}
+
+.tabla td.puntos {
+text-align:right;
+width:4em;
+}
+
+.tabla th {
+padding:.4em .25em;
+text-align:center;
+}
+
+.tabla thead {
+border:solid 0 #999;
+border-bottom-width:1px;
+text-align:center;
+}
+
+.tabla tr {
+line-height:1.5em;
+}
+
+.tabla-titulo {
+background-color:#FFD;
+border:1px solid #ddd000;
+border-radius:7px;
+margin:10px 0;
+padding:5px;
+text-align:center;
+}
+
+.tabla-titulo .titulo {
+font-weight:700;
+}
+
+a,a:visited,a:hover,a:active {
+color:#6493D2;
+}
+
+a.button {
+background-color:#AD0;
+border:1px solid #000;
+border-radius:8px;
+color:#000;
+font-size:110%;
+padding:5px 6px;
+}
+
+table.tabla {
+margin:auto;
+}
