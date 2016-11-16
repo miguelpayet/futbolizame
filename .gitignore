@@ -7,7 +7,6 @@
 *.png
 *.swp
 *.war
-*.xml
 *~
 .classpath
 .clover/
