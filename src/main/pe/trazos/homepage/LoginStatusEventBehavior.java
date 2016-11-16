@@ -52,7 +52,6 @@ public abstract class LoginStatusEventBehavior extends AbstractSubscribeBehavior
 		js.append("Wicket.Ajax.get({'u': callback + '&response=' + Wicket.Form.encode(response)});");
 		js.append("});");
 		js.append("});");
-		log.debug(js.toString());
 		response.render(JavaScriptHeaderItem.forScript(js.toString(), null));
 	}
 
