@@ -3,9 +3,6 @@ package pe.trazos.dominio;
 import javax.persistence.*;
 import java.io.Serializable;
 
-//@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Table(name = "posicion")
 public class Posicion implements Serializable, Comparable<Posicion> {
 
 	public static final int MAYOR = -1;
@@ -32,16 +29,18 @@ public class Posicion implements Serializable, Comparable<Posicion> {
 	@Transient
 	protected Integer partidosPerdidos;
 	@Transient
-	private Integer posicion;
-	@Transient
 	protected Integer puntos;
 
 	public Posicion() {
 		reset();
 	}
 
-	// comparar velocidad vs compararlos como string, concatenando los valores empacados con espacio o 0
-	// reglas fifa para tabla de posiciones eliminatoria
+	/**
+	 * pendiente: comparar velocidad vs compararlos como string, concatenando los valores empacados con espacio o 0
+	 * pendiente:  reglas fifa para tabla de posiciones eliminatoria
+	 * @param unaPosicion -> representa una posicion en la tabla
+	 * @return indica si este objeto es menor, igual o mayor que la posicion recibida
+	 */
 	public int compareTo(Posicion unaPosicion) {
 		if (puntos > unaPosicion.getPuntos()) {
 			return MAYOR;
@@ -82,6 +81,12 @@ public class Posicion implements Serializable, Comparable<Posicion> {
 		return equipo;
 	}
 
+	/**
+	 * método para wicket
+	 *
+	 * @return goles en contra del equipo en la tabla
+	 */
+	@SuppressWarnings("unused")
 	public Integer getGolesContra() {
 		return golesContra;
 	}
@@ -98,6 +103,12 @@ public class Posicion implements Serializable, Comparable<Posicion> {
 		return getEquipo().getLogo();
 	}
 
+	/**
+	 * método para wicket
+	 *
+	 * @return cantidad de partidos empatados del equipo en la tabla
+	 */
+	@SuppressWarnings("unused")
 	public Integer getPartidosEmpatados() {
 		return partidosEmpatados;
 	}
@@ -106,16 +117,24 @@ public class Posicion implements Serializable, Comparable<Posicion> {
 		return partidosGanados;
 	}
 
+	/**
+	 * método para wicket
+	 *
+	 * @return cantidad de partidos jugados del objeto
+	 */
+	@SuppressWarnings("unused")
 	public Integer getPartidosJugados() {
 		return partidosEmpatados + partidosPerdidos + partidosGanados;
 	}
 
+	/**
+	 * método para wicket
+	 *
+	 * @return partidos perdidos del equipo en la tabla
+	 */
+	@SuppressWarnings("unused")
 	public Integer getPartidosPerdidos() {
 		return partidosPerdidos;
-	}
-
-	public Integer getPosicion() {
-		return posicion;
 	}
 
 	public Integer getPuntos() {
@@ -139,36 +158,8 @@ public class Posicion implements Serializable, Comparable<Posicion> {
 		this.equipo = equipo;
 	}
 
-	public void setGolesContra(Integer golesContra) {
-		this.golesContra = golesContra;
-	}
-
-	public void setGolesFavor(Integer golesFavor) {
-		this.golesFavor = golesFavor;
-	}
-
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public void setPartidosEmpatados(Integer partidosEmpatados) {
-		this.partidosEmpatados = partidosEmpatados;
-	}
-
-	public void setPartidosGanados(Integer partidosGanados) {
-		this.partidosGanados = partidosGanados;
-	}
-
-	public void setPartidosPerdidos(Integer partidosPerdidos) {
-		this.partidosPerdidos = partidosPerdidos;
-	}
-
-	public void setPosicion(Integer posicion) {
-		this.posicion = posicion;
-	}
-
-	public void setPuntos(Integer puntos) {
-		this.puntos = puntos;
 	}
 
 	public void sumar(Posicionable unPosicionable, Posicionable otroPosicionable) {
@@ -180,6 +171,25 @@ public class Posicion implements Serializable, Comparable<Posicion> {
 			partidosEmpatados += unPosicionable.getPartidoEmpatado();
 			partidosPerdidos += unPosicionable.getPartidoPerdido();
 		}
+	}
+
+	/**
+	 * @return cadena de representación del objeto
+	 */
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		if (getEquipo() != null) {
+			sb.append(getEquipo().getNombre());
+		} else {
+			sb.append("sin equipo");
+		}
+		sb.append(" - ");
+		if (getPuntos() != null) {
+			sb.append("puntos ").append(getPuntos());
+		} else {
+			sb.append("sin puntos");
+		}
+		return sb.toString();
 	}
 
 }
