@@ -30,6 +30,7 @@ public class Fecha implements Serializable, Comparable<Fecha> {
 	@Column(name = "numero")
 	private Integer numero;
 	@OneToMany(mappedBy = "fecha", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@SuppressWarnings("unused") // mantenido para completar el modelo / no referenciado en el proyecto
 	@SortComparator(ComparadorPartido.class)
 	private SortedSet<Partido> partidos;
 
@@ -38,9 +39,9 @@ public class Fecha implements Serializable, Comparable<Fecha> {
 
 	/**
 	 * retorna un indicador si aplican los pronósticos para esta fecha
-	 * se puede pronosticar (y se consideran pronósticos) mientras la fecha es posterior a la fecha calendario
+	 * la regla es: se puede pronosticar (y se consideran pronósticos) mientras la fecha es posterior a la fecha calendario
 	 */
-	public boolean aplicaPronostico() {
+	public boolean aplicaPronosticar() {
 		return getFecha().after(new Date());
 	}
 
@@ -57,6 +58,12 @@ public class Fecha implements Serializable, Comparable<Fecha> {
 		return fecha;
 	}
 
+	/**
+	 * método para wicket
+	 *
+	 * @return un string con la fecha en formato dia-mes-año
+	 */
+	@SuppressWarnings("unused")
 	public String getFechaDia() {
 		final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		return dateFormat.format(getFecha());
