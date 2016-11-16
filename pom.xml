@@ -12,14 +12,12 @@
 	<description>sistema de fútbol</description>
 	<properties>
 		<hibernate.version>5.1.0.Final</hibernate.version>
-		<wicket.version>7.3.0</wicket.version>
+		<wicket.version>8.0.0-M2</wicket.version>
 		<jetty9.version>9.3.7.v20160115</jetty9.version>
 		<log4j.version>2.1</log4j.version>
 		<junit.version>4.12</junit.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!--shiro.version>1.2.4</shiro.version-->
-		<wtp.version>none</wtp.version>
-		<wicket.stuff.version>8.0.0-SNAPSHOT</wicket.stuff.version>
+		<wicket.stuff.version>8.0.0-M1</wicket.stuff.version>
 	</properties>
 	<dependencies>
 		<!-- WICKET DEPENDENCIES -->
