@@ -28,5 +28,6 @@ pom.xml.releaseBackup
 pom.xml.tag
 pom.xml.versionsBackup
 rebel.xml
+src/main/resources/data/anterior/*.xml
 target-ide/
 target/
