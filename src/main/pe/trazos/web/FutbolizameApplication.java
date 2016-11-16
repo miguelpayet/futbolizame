@@ -8,13 +8,12 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.wicket.request.cycle.IRequestCycleListener;
 import pe.trazos.auth.SesionWeb;
-import pe.trazos.componentes.WebPageBase;
 import pe.trazos.homepage.HomePage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FutbolizameApplication extends WebApplication {
 
@@ -23,6 +22,15 @@ public class FutbolizameApplication extends WebApplication {
 	}
 
 	public FutbolizameApplication() {
+	}
+
+	private void agregarRequestListeners() {
+		List<IRequestCycleListener> listeners = new ArrayList<>();
+		listeners.add(new HibernateRequestListener());
+		listeners.add(new LogRequestListener());
+		for (IRequestCycleListener listener : listeners) {
+			getRequestCycleListeners().add(listener);
+		}
 	}
 
 	@Override
@@ -38,7 +46,7 @@ public class FutbolizameApplication extends WebApplication {
 		if (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
 			getDebugSettings().setOutputComponentPath(true);
 		}
-		getRequestCycleListeners().add(new HibernateRequestListener());
+		agregarRequestListeners();
 	}
 
 	@Override
