@@ -20,7 +20,7 @@ public class ModeloFecha extends LoadableDetachableModel<Fecha> {
 
 	@Override
 	protected Fecha load() {
-		log.debug("load");
+
 		DaoFecha df = new DaoFecha();
 		Fecha f = df.get(idFecha);
 		return f;
@@ -28,7 +28,7 @@ public class ModeloFecha extends LoadableDetachableModel<Fecha> {
 
 	@Override
 	protected void onDetach() {
-		log.debug("onDetach");
+
 	}
 
 }

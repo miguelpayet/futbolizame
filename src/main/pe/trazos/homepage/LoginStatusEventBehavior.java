@@ -33,7 +33,7 @@ public abstract class LoginStatusEventBehavior extends AbstractSubscribeBehavior
 	protected abstract void onLoginStatus(AjaxRequestTarget target, String status, String userId, String expiresIn, String accessToken);
 
 	public void renderHead(final Component component, final IHeaderResponse response) {
-		log.debug("renderHead");
+
 		final StringBuilder js = new StringBuilder();
 		js.append("FB.Event.subscribe('").append("xfbml.render").append("', function(response) {");
 		js.append("FB.getLoginStatus(function(response) {");

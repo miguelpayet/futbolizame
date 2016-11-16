@@ -83,30 +83,30 @@ public class SesionWeb extends WebSession {
 	}
 
 	public void loginAnonimo() {
-		log.debug("login anónimo");
+
 		if (!isLoginAnonimo()) {
 			tipo = TipoSesion.ANONIMO;
 			WebRequest webRequest = (WebRequest) RequestCycle.get().getRequest();
 			Cookie cookie = webRequest.getCookie(NOMBRE_COOKIE);
 			if (cookie == null) {
-				log.debug("crear nuevo cookie");
+
 				idAnonimo = UUID.randomUUID().toString();
 				cookie = new Cookie(NOMBRE_COOKIE, idAnonimo);
 				cookie.setPath("/");
 			} else {
-				log.debug("leer cookie");
+
 				idAnonimo = cookie.getValue();
 			}
 			cookie.setMaxAge(7 * 24 * 60 * 60);
 			WebResponse webResponse = (WebResponse) RequestCycle.get().getResponse();
 			webResponse.addCookie(cookie);
 			crearVisitante(tipo, idAnonimo, "", "");
-			log.debug("id anónimo {}", idAnonimo);
+
 		}
 	}
 
 	public boolean loginFacebook(String unUserId, String unToken) {
-		log.debug("loginFacebook {}", unUserId);
+
 		try {
 			tipo = TipoSesion.FACEBOOK;
 			if (unUserId == null || unToken == null) {
@@ -125,7 +125,7 @@ public class SesionWeb extends WebSession {
 			nombreFacebook = user.getName();
 			// crear o actualizar el registro de bd
 			crearVisitante(tipo, unUserId, nombreFacebook, unToken);
-			log.debug("nombre {}", nombreFacebook);
+
 			return true;
 		} catch (Exception e) {
 			tipo = TipoSesion.INDEFINIDO;

@@ -36,7 +36,6 @@ public abstract class WebPageBase extends GenericWebPage {
 
 	private void agregarFacebook() {
 		String facebookid = FutbolizameApplication.get().getInitParameter("facebook-app-id");
-		log.debug("app id {}", facebookid);
 		FacebookSdk fsdk = new FacebookSdk("fb-root", facebookid);
 		fsdk.setOgProperty("url", getUrlBase());
 		fsdk.setOgProperty("type", "website");
@@ -53,25 +52,25 @@ public abstract class WebPageBase extends GenericWebPage {
 		add(new AuthLoginEventBehavior() {
 			@Override
 			protected void onSessionEvent(AjaxRequestTarget target, String status, String userId, String signedRequest, String expiresIn, String accessToken) {
-				log.info("login event");
+
 				doLogin(userId, accessToken, target);
 			}
 		});
 		add(new LogoutEventBehavior() {
 			@Override
 			protected void onLogout(AjaxRequestTarget target, String status) {
-				log.info("logout event");
+
 				doLogout(target);
 			}
 		});
 		add(new LoginStatusEventBehavior() {
 			@Override
 			protected void onLoginStatus(AjaxRequestTarget target, String status, String userId, String expiresIn, String accessToken) {
-				log.info("login status event: " + status);
+
 				if (status != null && status.equals("connected")) {
 					doLogin(userId, accessToken, target);
 				} else {
-					log.info("status: " + status);
+
 					doLogout(target); // esto pinta la tabla anónima
 				}
 			}

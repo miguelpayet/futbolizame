@@ -62,8 +62,8 @@ public class PanelFecha extends Panel {
 		// botón para grabar
 		AjaxSubmitLink link = new AjaxSubmitLink("boton-actualizar", partidoForm) {
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form form) {
-				log.info("save.onsubmit");
+			protected void onSubmit(AjaxRequestTarget target) {
+
 				grabar();
 				if (validarFechaCompleta()) {
 					homePage.actualizar(target);
@@ -84,7 +84,7 @@ public class PanelFecha extends Panel {
 	private void agregarPartidos() {
 		participantes = new MultiMap<>();
 		for (Partido p : fecha.getObject().getPartidos()) {
-			log.debug("partido: " + p);
+
 			crearUnPartido(p, partidoRepetidor);
 		}
 	}
@@ -94,7 +94,7 @@ public class PanelFecha extends Panel {
 	private void crearPartidos() {
 		RepeatingView nuevoRepetidor = new RepeatingView("repeater");
 		nuevoRepetidor.setOutputMarkupId(true);
-		log.info("repetidor {}", nuevoRepetidor.getMarkupId());
+
 		for (Partido p : fecha.getObject().getPartidos()) {
 			crearUnPartido(p, nuevoRepetidor);
 		}
@@ -121,7 +121,7 @@ public class PanelFecha extends Panel {
 
 	@SuppressWarnings("unused")
 	private Component getParentWindow(Component unComponente) {
-		log.debug(unComponente.getClass().getName() + " " + unComponente.toString());
+
 		if (unComponente.getParent() == null) {
 			return unComponente;
 		} else if (unComponente.getParent() instanceof WebPageBase) {
@@ -132,13 +132,13 @@ public class PanelFecha extends Panel {
 	}
 
 	private void grabar() {
-		log.info("grabar");
+
 		// grabar partidos futuros
 		final Date ahora = new Date();
 		for (Partido part : fecha.getObject().getPartidos()) {
 			List<Posicionable> pronosticos = participantes.get(part.getId());
 			pronosticos.stream().filter(p -> ahora.before(p.getPartido().getFechaPartido())).forEach(p -> {
-				log.info("grabando " + p.toString());
+
 				HibernateUtil.getSessionFactory().getCurrentSession().saveOrUpdate(p);
 			});
 		}

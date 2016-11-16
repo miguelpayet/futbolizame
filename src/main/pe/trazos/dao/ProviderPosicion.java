@@ -44,7 +44,7 @@ public class ProviderPosicion implements IDataProvider<Posicion>, Serializable {
 	@Override
 	public long size() {
 		if (modelo == null) {
-			logger.info("sin competencia");
+
 			return 0;
 		}
 		if (modelo.getPosiciones() == null) {

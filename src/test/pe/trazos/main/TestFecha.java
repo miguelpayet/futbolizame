@@ -35,7 +35,7 @@ public class TestFecha extends TestBase {
 		if (f != null) {
 			Set<Fecha> fechas = df.listarAnteriores(f);
 			for (Fecha fl : fechas) {
-				log.info(fl.toString());
+
 			}
 		}
 	}
@@ -51,7 +51,7 @@ public class TestFecha extends TestBase {
 			assertNotNull(fechas);
 			Assert.assertNotEquals(fechas.size(), 0);
 			for (Fecha fl : fechas) {
-				log.info(fl.toString());
+
 			}
 		}
 	}

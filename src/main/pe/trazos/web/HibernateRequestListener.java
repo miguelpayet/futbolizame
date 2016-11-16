@@ -23,7 +23,7 @@ public class HibernateRequestListener implements IRequestCycleListener {
 
 	@Override
 	public void onBeginRequest(RequestCycle cycle) {
-		log.debug("onBeginRequest");
+
 		Session sesion = factoria.getCurrentSession();
 		sesion.beginTransaction();
 	}
@@ -35,7 +35,7 @@ public class HibernateRequestListener implements IRequestCycleListener {
 
 	@Override
 	public void onEndRequest(RequestCycle cycle) {
-		log.debug("onEndRequest");
+
 		Session sesion = factoria.getCurrentSession();
 		try {
 			sesion.getTransaction().commit();
@@ -78,7 +78,7 @@ public class HibernateRequestListener implements IRequestCycleListener {
 
 	@Override
 	public void onUrlMapped(RequestCycle cycle, IRequestHandler handler, Url url) {
-		//log.debug("onUrlMapped {}", url.toString());
+
 	}
 
 }

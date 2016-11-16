@@ -48,7 +48,7 @@ public class Competencia implements Serializable {
 	}
 
 	public void crearPosiciones() {
-		log.debug("crear posiciones");
+
 		Date fechaLimite;
 		if (getFechaActual() == null) {
 			fechaLimite = null;
@@ -57,31 +57,31 @@ public class Competencia implements Serializable {
 		}
 		resetPosiciones();
 		for (Fecha fec : fechas) {
-			log.debug("{}", fec);
+
 			if (fechaLimite == null || !fec.getFecha().after(fechaLimite)) {
 				for (Partido partido : fec.getPartidos()) {
-					log.trace("{}", partido);
+
 					Map<Boolean, Participacion> participantes = partido.getParticipantes();
 					// buscar los pronosticos y armar el mapa de pronosticos
 					Map<Boolean, Pronostico> pronosticoPartido = obtenerPronosticos(participantes);
 					// calcular las posiciones para los 2 participantes
 					if (pronosticoPartido != null) {
-						log.trace("usando pronóstico");
+
 						crearUnaPosicion(pronosticoPartido);
 					} else {
-						log.trace("usando participantes");
+
 						crearUnaPosicion(participantes);
 					}
 				}
 			}
 		}
-		log.debug("posiciones: " + posiciones.size());
+
 	}
 
 	private void crearUnaPosicion(Map<Boolean, ? extends Posicionable> unosParticipantes) {
 		// quiero que se asimile en la posicion cada uno de los pronosticos o participaciones
 		// en la participacion está relacionado a través del partido, pero en el pronóstico no y por eso vienen en pares
-		log.trace("crear una posición");
+
 		for (Map.Entry<Boolean, ? extends Posicionable> partEntry : unosParticipantes.entrySet()) {
 			Posicionable participante = partEntry.getValue();
 			Posicion posicion = obtenerPosicion(participante);
@@ -150,7 +150,7 @@ public class Competencia implements Serializable {
 			posi = new Posicion();
 			posi.setEquipo(unPosicionable.getEquipo());
 			posiciones.put(unPosicionable.getEquipo().getNombre(), posi);
-			log.debug("crear posición " + posi);
+
 		}
 		return posi;
 	}
@@ -212,7 +212,7 @@ public class Competencia implements Serializable {
 		Fecha fechaMenor = null;
 		for (Fecha f : getFechas()) {
 			if (f.getFecha().before(fechaActual.getFecha())) {
-				log.debug("fecha anterior {}", f);
+
 				// la mayor fecha de la colección que sea menor a la que pidieron
 				fechaMenor = f;
 			}

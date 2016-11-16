@@ -21,7 +21,7 @@ public class LogRequestListener implements IRequestCycleListener {
 	public void onBeginRequest(RequestCycle cycle) {
 		Request req = cycle.getRequest();
 		HttpServletRequest servletReq = (HttpServletRequest) req.getContainerRequest();
-		log.debug("onBeginRequest - {} ({}) - [{}]", servletReq.getRemoteHost(), servletReq.getRemoteAddr(), req.getOriginalUrl());
+
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class LogRequestListener implements IRequestCycleListener {
 
 	@Override
 	public void onEndRequest(RequestCycle cycle) {
-		log.debug("onEndRequest {}", cycle.getRequest().getOriginalUrl());
+
 	}
 
 	@Override

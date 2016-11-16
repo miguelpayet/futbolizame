@@ -54,7 +54,8 @@ public class ModeloCompetencia extends LoadableDetachableModel<Competencia> {
 
 	private void init() {
 		// identificar competencia configurada
-		idCompetencia = Integer.valueOf(FutbolizameApplication.get().getInitParameter("competencia.id"));
+		String valorParametro = FutbolizameApplication.get().getInitParameter("competencia.id");
+		idCompetencia = Integer.valueOf(valorParametro);
 		if (idCompetencia == null) {
 			throw new RuntimeException("no está configurado id de competencia");
 		}
@@ -63,7 +64,7 @@ public class ModeloCompetencia extends LoadableDetachableModel<Competencia> {
 
 	@Override
 	protected Competencia load() {
-		log.debug("load");
+
 		DaoCompetencia dc = new DaoCompetencia();
 		Competencia c = dc.get(idCompetencia);
 		if (c == null) {
@@ -79,12 +80,12 @@ public class ModeloCompetencia extends LoadableDetachableModel<Competencia> {
 
 	@Override
 	protected void onAttach() {
-		log.debug("onAttach");
+
 	}
 
 	@Override
 	protected void onDetach() {
-		log.debug("onDetach");
+
 		idCompetencia = getObject().getId();
 		if (getObject().getFechaActual() != null) {
 			idFecha = getObject().getFechaActual().getId();

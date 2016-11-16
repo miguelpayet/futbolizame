@@ -45,7 +45,7 @@ public class HomePage extends WebPageBase {
 		AjaxLink linkAnterior = new AjaxLink("boton-anterior") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				log.info("fecha anterior");
+
 				competencia.getObject().setFechaAnterior();
 				if (competencia.getObject().getFechaActual() != null) {
 					reemplazarTablaPosiciones();
@@ -59,7 +59,7 @@ public class HomePage extends WebPageBase {
 		AjaxLink linkSiguiente = new AjaxLink("boton-siguiente") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				log.info("fecha siguiente");
+
 				competencia.getObject().setFechaSiguiente();
 				if (competencia.getObject().getFechaActual() != null) {
 					reemplazarTablaPosiciones();
@@ -95,7 +95,7 @@ public class HomePage extends WebPageBase {
 	@Override
 	protected void doLogin(String unUsuario, String unToken, AjaxRequestTarget unTarget) {
 		// si ya tiene facebook login, no hacer nada
-		log.debug("doLogin");
+
 		if (!getSesion().isLoginFacebook()) {
 			if (getSesion().loginFacebook(unUsuario, unToken)) {
 				actualizar(unTarget);
@@ -105,7 +105,7 @@ public class HomePage extends WebPageBase {
 
 	@Override
 	protected void doLogout(AjaxRequestTarget unTarget) {
-		log.debug("doLogout");
+
 		// logout tipo facebook
 		getSesion().logoutFacebook();
 		// volver a sesion anonima
@@ -114,7 +114,7 @@ public class HomePage extends WebPageBase {
 	}
 
 	private void init() {
-		log.debug("init");
+
 		competencia = new ModeloCompetencia();
 		competencia.getObject().setFechaProxima();
 	}

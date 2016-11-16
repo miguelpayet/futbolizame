@@ -83,7 +83,7 @@ public class DaoPronostico extends Dao<Pronostico> {
 		}
 		sb.append(String.join(",", lista));
 		sb.append(")");
-		log.debug(sb.toString());
+
 		Query query = session.createQuery(sb.toString());
 		List<Pronostico> list = query.list();
 		Map<Participacion, Pronostico> pronosticos = new HashMap<>();

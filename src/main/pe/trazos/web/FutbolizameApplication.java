@@ -2,7 +2,6 @@ package pe.trazos.web;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import org.apache.wicket.Application;
-import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -43,9 +42,6 @@ public class FutbolizameApplication extends WebApplication {
 	public void init() {
 		super.init();
 		Bootstrap.install(this);
-		if (getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
-			getDebugSettings().setOutputComponentPath(true);
-		}
 		agregarRequestListeners();
 	}
 

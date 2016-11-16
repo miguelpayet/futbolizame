@@ -42,7 +42,7 @@ public class PanelTablaPosiciones extends Panel {
 			@Override
 			protected Item<Posicion> newRowItem(final String id, final int index, final IModel<Posicion> model) {
 				Item<Posicion> item = new Item<>(id, index, model);
-				log.debug(model.getObject().toString());
+
 				item.add(new AttributeModifier("class", "fila-" + String.valueOf(++fila)));
 				return item;
 			}

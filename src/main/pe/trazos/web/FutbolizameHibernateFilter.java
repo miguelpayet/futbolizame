@@ -16,7 +16,7 @@ public class FutbolizameHibernateFilter implements Filter {
 
 	@Override
 	public void destroy() {
-		log.debug("destroy");
+
 	}
 
 	@Override
@@ -25,10 +25,10 @@ public class FutbolizameHibernateFilter implements Filter {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session sesion = sf.getCurrentSession();
 		try {
-			log.debug("doFilter - beginTransaction");
+
 			sesion.beginTransaction();
 			chain.doFilter(request, response);
-			log.debug("doFilter - commit");
+
 			sesion.getTransaction().commit();
 		} catch (Throwable ex) {
 			try {
@@ -46,7 +46,7 @@ public class FutbolizameHibernateFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		log.debug("FutbolizameHibernateFilter.init");
+
 	}
 
 }

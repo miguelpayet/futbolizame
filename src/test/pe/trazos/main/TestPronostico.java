@@ -38,7 +38,7 @@ public class TestPronostico extends TestBase {
 		DaoPronostico dp = new DaoPronostico();
 		Map<Participacion, Pronostico> pronosticos = dp.obtenerPronosticosFecha(v, f);
 		for (Pronostico p : pronosticos.values()) {
-			log.info("{} - {}", p.getParticipacion().getEquipo().getNombre(), p.getGoles());
+
 			Assert.assertNotNull(p.getGoles());
 		}
 	}
@@ -67,12 +67,12 @@ public class TestPronostico extends TestBase {
 		Competencia c = dc.get(ID_COMPETENCIA);
 		c.setVisitante(v);
 		for (Fecha f : c.getFechas()) {
-			log.info("{}", f.toString());
+
 			// si está pronosticada completamente por el visitante devuelve rtue, si no false
-			log.info("tiene pronóstico {} ", f.tienePronostico());
+
 			// si ya pasó la fecha y no aplica pronostico
 			f.aplicaPronosticar();
-			log.info("aplica pronosticar {} ", f.aplicaPronosticar());
+
 		}
 	}
 
