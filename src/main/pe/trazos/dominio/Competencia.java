@@ -23,6 +23,7 @@ public class Competencia implements Serializable {
 
 	private static final Logger log = LoggerFactory.getLogger(Competencia.class);
 
+	@SuppressWarnings("unused")
 	@Column(name = "actualizado")
 	private Date actualizado;
 	@Transient
@@ -60,16 +61,13 @@ public class Competencia implements Serializable {
 
 			if (fechaLimite == null || !fec.getFecha().after(fechaLimite)) {
 				for (Partido partido : fec.getPartidos()) {
-
 					Map<Boolean, Participacion> participantes = partido.getParticipantes();
 					// buscar los pronosticos y armar el mapa de pronosticos
 					Map<Boolean, Pronostico> pronosticoPartido = obtenerPronosticos(participantes);
 					// calcular las posiciones para los 2 participantes
 					if (pronosticoPartido != null) {
-
 						crearUnaPosicion(pronosticoPartido);
 					} else {
-
 						crearUnaPosicion(participantes);
 					}
 				}
@@ -81,7 +79,6 @@ public class Competencia implements Serializable {
 	private void crearUnaPosicion(Map<Boolean, ? extends Posicionable> unosParticipantes) {
 		// quiero que se asimile en la posicion cada uno de los pronosticos o participaciones
 		// en la participacion está relacionado a través del partido, pero en el pronóstico no y por eso vienen en pares
-
 		for (Map.Entry<Boolean, ? extends Posicionable> partEntry : unosParticipantes.entrySet()) {
 			Posicionable participante = partEntry.getValue();
 			Posicion posicion = obtenerPosicion(participante);
@@ -176,26 +173,6 @@ public class Competencia implements Serializable {
 		return pronosticoPartido;
 	}
 
-	@Deprecated
-	private Map<Boolean, Pronostico> obtenerPronosticos(Map<Boolean, Participacion> participantes, Map<Participacion, Pronostico> pronosticos) {
-		Map<Boolean, Pronostico> pronosticoPartido = null;
-		if (pronosticos != null) {
-			pronosticoPartido = new HashMap<>();
-			for (Map.Entry<Boolean, Participacion> partEntry : participantes.entrySet()) {
-				Participacion participante = partEntry.getValue();
-				Pronostico pro = pronosticos.get(participante);
-				if (pro != null) {
-					pronosticoPartido.put(partEntry.getKey(), pro);
-				}
-			}
-			if (pronosticoPartido.size() != 2) {
-				// lo más probable es que nunca pase por aquí
-				pronosticoPartido = null;
-			}
-		}
-		return pronosticoPartido;
-	}
-
 	private void resetPosiciones() {
 		posiciones = new HashMap<>();
 	}
@@ -253,6 +230,5 @@ public class Competencia implements Serializable {
 	public void setVisitante(Visitante unVisitante) {
 		visitante = unVisitante;
 	}
-
 
 }

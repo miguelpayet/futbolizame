@@ -52,25 +52,21 @@ public abstract class WebPageBase extends GenericWebPage {
 		add(new AuthLoginEventBehavior() {
 			@Override
 			protected void onSessionEvent(AjaxRequestTarget target, String status, String userId, String signedRequest, String expiresIn, String accessToken) {
-
 				doLogin(userId, accessToken, target);
 			}
 		});
 		add(new LogoutEventBehavior() {
 			@Override
 			protected void onLogout(AjaxRequestTarget target, String status) {
-
 				doLogout(target);
 			}
 		});
 		add(new LoginStatusEventBehavior() {
 			@Override
 			protected void onLoginStatus(AjaxRequestTarget target, String status, String userId, String expiresIn, String accessToken) {
-
 				if (status != null && status.equals("connected")) {
 					doLogin(userId, accessToken, target);
 				} else {
-
 					doLogout(target); // esto pinta la tabla anónima
 				}
 			}

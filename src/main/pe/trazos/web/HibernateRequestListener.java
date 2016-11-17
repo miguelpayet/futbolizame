@@ -23,7 +23,6 @@ public class HibernateRequestListener implements IRequestCycleListener {
 
 	@Override
 	public void onBeginRequest(RequestCycle cycle) {
-
 		Session sesion = factoria.getCurrentSession();
 		sesion.beginTransaction();
 	}
@@ -35,7 +34,6 @@ public class HibernateRequestListener implements IRequestCycleListener {
 
 	@Override
 	public void onEndRequest(RequestCycle cycle) {
-
 		Session sesion = factoria.getCurrentSession();
 		try {
 			sesion.getTransaction().commit();
@@ -45,7 +43,7 @@ public class HibernateRequestListener implements IRequestCycleListener {
 					sesion.getTransaction().rollback();
 				}
 			} catch (Throwable rbEx) {
-				log.error("could not rollback after exception!", rbEx);
+				log.error("could not rollback after exception", rbEx);
 				rbEx.printStackTrace();
 			}
 		}
@@ -78,7 +76,6 @@ public class HibernateRequestListener implements IRequestCycleListener {
 
 	@Override
 	public void onUrlMapped(RequestCycle cycle, IRequestHandler handler, Url url) {
-
 	}
 
 }

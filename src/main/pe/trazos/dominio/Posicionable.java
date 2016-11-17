@@ -59,7 +59,6 @@ public abstract class Posicionable implements Serializable {
 	protected abstract Equipo getEquipo();
 
 	public Integer getGoles() {
-
 		return goles;
 	}
 
@@ -100,30 +99,6 @@ public abstract class Posicionable implements Serializable {
 
 	public void setGoles(Integer goles) {
 		this.goles = goles;
-	}
-
-	public void setGolesContra(Integer golesContra) {
-		this.golesContra = golesContra;
-	}
-
-	public void setGolesFavor(Integer golesFavor) {
-		this.golesFavor = golesFavor;
-	}
-
-	public void setPartidoEmpatado(Integer partidoEmpatado) {
-		this.partidoEmpatado = partidoEmpatado;
-	}
-
-	public void setPartidoGanado(Integer partidoGanado) {
-		this.partidoGanado = partidoGanado;
-	}
-
-	public void setPartidoPerdido(Integer partidoPerdido) {
-		this.partidoPerdido = partidoPerdido;
-	}
-
-	public void setPuntos(Integer puntos) {
-		this.puntos = puntos;
 	}
 
 	public boolean tieneGoles() {

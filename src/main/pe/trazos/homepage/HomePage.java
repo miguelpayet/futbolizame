@@ -18,6 +18,7 @@ public class HomePage extends WebPageBase {
 	private ModeloCompetencia competencia;
 	private WebMarkupContainer fechaExterior;
 	private Component fechaPanel;
+	private AjaxLink[] linksFecha;
 	private WebMarkupContainer tablaExterior;
 	private Component tablaPanel;
 
@@ -42,10 +43,10 @@ public class HomePage extends WebPageBase {
 	}
 
 	private void agregarEnlacesFecha() {
-		AjaxLink linkAnterior = new AjaxLink("boton-anterior") {
+		linksFecha = new AjaxLink[2];
+		linksFecha[0] = new AjaxLink("boton-anterior") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-
 				competencia.getObject().setFechaAnterior();
 				if (competencia.getObject().getFechaActual() != null) {
 					reemplazarTablaPosiciones();
@@ -55,11 +56,9 @@ public class HomePage extends WebPageBase {
 				}
 			}
 		};
-		fechaExterior.add(linkAnterior);
-		AjaxLink linkSiguiente = new AjaxLink("boton-siguiente") {
+		linksFecha[1] = new AjaxLink("boton-siguiente") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-
 				competencia.getObject().setFechaSiguiente();
 				if (competencia.getObject().getFechaActual() != null) {
 					reemplazarTablaPosiciones();
@@ -69,7 +68,10 @@ public class HomePage extends WebPageBase {
 				}
 			}
 		};
-		fechaExterior.add(linkSiguiente);
+		for (AjaxLink link : linksFecha) {
+			link.setVisible(false);
+			fechaExterior.add(link);
+		}
 	}
 
 	protected void agregarIntro() throws RuntimeException {
@@ -92,17 +94,33 @@ public class HomePage extends WebPageBase {
 		tablaExterior.add(tablaPanel);
 	}
 
+	/**
+	 * responde a la acción de login de facebook
+	 *
+	 * @param unUsuario -> id de usuario de facebook
+	 * @param unToken   -> token de facebook
+	 * @param unTarget  -> objetos a ser actualizados por wicket
+	 */
 	@Override
 	protected void doLogin(String unUsuario, String unToken, AjaxRequestTarget unTarget) {
+		// activar los links de siguiente y anterior fecha
+		mostrarLinksFecha(unTarget);
 		// si ya tiene facebook login, no hacer nada
-
 		if (!getSesion().isLoginFacebook()) {
 			if (getSesion().loginFacebook(unUsuario, unToken)) {
+				log.debug("loginFacebook {}", getSesion().getUserName());
+				// hacer visibles los links de fecha siguiente y anterior
+				// actualizar el display de tabla y partidos
 				actualizar(unTarget);
 			}
 		}
 	}
 
+	/**
+	 * responde a la acción de logout del api de facebook o a la carga del api de facebook (sin login)
+	 *
+	 * @param unTarget -> objetos a ser actualizados por wicket
+	 */
 	@Override
 	protected void doLogout(AjaxRequestTarget unTarget) {
 
@@ -110,6 +128,9 @@ public class HomePage extends WebPageBase {
 		getSesion().logoutFacebook();
 		// volver a sesion anonima
 		getSesion().loginAnonimo();
+		// activar los links de siguiente y anterior fecha
+		mostrarLinksFecha(unTarget);
+		// actualizar el display de tabla y partidos
 		actualizar(unTarget);
 	}
 
@@ -130,8 +151,22 @@ public class HomePage extends WebPageBase {
 		competencia.detach();
 	}
 
+	/**
+	 * mostrar los links de fecha anterior y siguiente cuando termina de cargar la lógica de facebook
+	 */
+	private void mostrarLinksFecha(AjaxRequestTarget unTarget) {
+		for (AjaxLink link : linksFecha) {
+			link.setVisible(true);
+			unTarget.add(link);
+		}
+	}
+
 	private void reemplazarFecha() {
+		log.debug("reemplazarFecha en panel {}", fechaPanel);
 		Fecha fechaActual = competencia.getObject().getFechaActual();
+		if (fechaActual != null) {
+			log.debug("fecha es {}", fechaActual);
+		}
 		Component nuevoPanel = new PanelFecha("panel-fecha", new ModeloFecha(fechaActual), this);
 		fechaPanel.replaceWith(nuevoPanel);
 		fechaPanel = nuevoPanel;

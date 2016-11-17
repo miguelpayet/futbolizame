@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pe.trazos.componentes.WebPageBase;
 import pe.trazos.dao.HibernateUtil;
+import pe.trazos.dominio.Fecha;
 import pe.trazos.dominio.Partido;
 import pe.trazos.dominio.Posicionable;
 
@@ -63,8 +64,7 @@ public class PanelFecha extends Panel {
 		AjaxSubmitLink link = new AjaxSubmitLink("boton-actualizar", partidoForm) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-
-				grabar();
+				grabar ();
 				if (validarFechaCompleta()) {
 					homePage.actualizar(target);
 				} else {
@@ -94,7 +94,6 @@ public class PanelFecha extends Panel {
 	private void crearPartidos() {
 		RepeatingView nuevoRepetidor = new RepeatingView("repeater");
 		nuevoRepetidor.setOutputMarkupId(true);
-
 		for (Partido p : fecha.getObject().getPartidos()) {
 			crearUnPartido(p, nuevoRepetidor);
 		}
@@ -131,42 +130,67 @@ public class PanelFecha extends Panel {
 		}
 	}
 
+	/**
+	 * intenta grabar la fecha
+	 * solamente graba cuando es una fecha pronosticable
+	 */
 	private void grabar() {
-
 		// grabar partidos futuros
 		final Date ahora = new Date();
-		for (Partido part : fecha.getObject().getPartidos()) {
-			List<Posicionable> pronosticos = participantes.get(part.getId());
-			pronosticos.stream().filter(p -> ahora.before(p.getPartido().getFechaPartido())).forEach(p -> {
-
-				HibernateUtil.getSessionFactory().getCurrentSession().saveOrUpdate(p);
-			});
-		}
-
-	}
-
-	private boolean validarFechaCompleta() {
-		// recorre desde la fecha y pregunta si cada partido está pronosticado
-		boolean golesNulos = false;
-		boolean faltanPronosticos = false;
-		for (Partido part : fecha.getObject().getPartidos()) {
-			// validar si los dos participantes tienen un pronóstico que no es null
-			List<Posicionable> pronosticos = participantes.get(part.getId());
-			faltanPronosticos = (faltanPronosticos || (pronosticos.size() != 2));
-			for (Posicionable posi : pronosticos) {
-				golesNulos = (golesNulos || (posi.getGoles() == null));
+		if (fecha.getObject() == null) {
+			log.warn("fecha nula");
+		} else {
+			if (fecha.getObject().aplicaPronosticar()) {
+				// grabar partidos futuros
+				for (Partido part : fecha.getObject().getPartidos()) {
+					List<Posicionable> pronosticos = participantes.get(part.getId());
+					pronosticos.stream().filter(p -> ahora.before(p.getPartido().getFechaPartido())).forEach(p -> {
+						log.debug("grabando " + p.toString());
+						HibernateUtil.getSessionFactory().getCurrentSession().saveOrUpdate(p); // todo: acceso de datos desde el ui
+					});
+				}
 			}
 		}
-		if (faltanPronosticos) {
-			log.error("los pronósticos no están completos");
-			error("por alguna razón, no hemos captado todos tus pronósticos.");
+	}
+
+	/**
+	 * valida si se ha realizado un pronóstico completo para una fecha
+	 * valida que la fecha sea pronosticable antes de hacer la validación
+	 *
+	 * @return true si la fecha es pronosticable y encuentra pronósticos completos (2 x partido), false en otros casos
+	 */
+	private boolean validarFechaCompleta() {
+		boolean validacion;
+		Fecha laFecha = fecha.getObject();
+		if (laFecha.aplicaPronosticar()) {
+			// si la fecha es pronosticable recorre  la fecha y pregunta si cada partido está pronosticado
+			boolean golesNulos = false;
+			boolean faltanPronosticos = false;
+			for (Partido part : fecha.getObject().getPartidos()) {
+				// validar si los dos participantes tienen un pronóstico que no es null
+				List<Posicionable> pronosticos = participantes.get(part.getId());
+				if (pronosticos != null) {
+					faltanPronosticos = faltanPronosticos || pronosticos.size() != 2;
+					for (Posicionable posi : pronosticos) {
+						golesNulos = (golesNulos || (posi.getGoles() == null));
+					}
+				}
+			}
+			if (faltanPronosticos) {
+				log.error("los pronósticos no están completos");
+				error("por alguna razón no hemos captado todos tus pronósticos");
+			}
+			if (golesNulos) {
+				// se puede cambiar el estilo de un partido no pronosticado
+				log.warn("hay goles nulos en el pronóstico");
+				error("no puedes actualizar la tabla sin pronosticar todos los partidos de la fecha");
+			}
+			validacion = !faltanPronosticos && !golesNulos;
+		} else {
+			// si la fecha no es pronosticable no arroja ningún mensaje y devuelve false
+			validacion = false;
 		}
-		if (golesNulos) {
-			// ¿podemos cambiar el estilo de un partido no pronosticado?
-			log.warn("hay goles nulos");
-			error("no puedes actualizar la tabla si no pronosticas todos los partidos");
-		}
-		return (!faltanPronosticos && !golesNulos);
+		return validacion;
 	}
 
 }
