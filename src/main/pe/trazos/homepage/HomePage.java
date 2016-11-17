@@ -108,7 +108,6 @@ public class HomePage extends WebPageBase {
 		// si ya tiene facebook login, no hacer nada
 		if (!getSesion().isLoginFacebook()) {
 			if (getSesion().loginFacebook(unUsuario, unToken)) {
-				log.debug("loginFacebook {}", getSesion().getUserName());
 				// hacer visibles los links de fecha siguiente y anterior
 				// actualizar el display de tabla y partidos
 				actualizar(unTarget);
@@ -162,11 +161,7 @@ public class HomePage extends WebPageBase {
 	}
 
 	private void reemplazarFecha() {
-		log.debug("reemplazarFecha en panel {}", fechaPanel);
 		Fecha fechaActual = competencia.getObject().getFechaActual();
-		if (fechaActual != null) {
-			log.debug("fecha es {}", fechaActual);
-		}
 		Component nuevoPanel = new PanelFecha("panel-fecha", new ModeloFecha(fechaActual), this);
 		fechaPanel.replaceWith(nuevoPanel);
 		fechaPanel = nuevoPanel;
