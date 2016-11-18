@@ -39,7 +39,7 @@ public abstract class WebPageBase extends GenericWebPage {
 		FacebookSdk fsdk = new FacebookSdk("fb-root", facebookid);
 		fsdk.setOgProperty("url", getUrlBase());
 		fsdk.setOgProperty("type", "website");
-		fsdk.setOgProperty("description", "pronósitco de la eliminatoria a rusia 2018 en sudamérica");
+		fsdk.setOgProperty("description", "pronósti co de la eliminatoria a rusia 2018 en sudamérica");
 		add(fsdk);
 		final IModel<String> url = Model.of("http://futboliza.me"); // todo: no en duro
 		final LikeButton likeButton = new LikeButton("likeButton", url);
